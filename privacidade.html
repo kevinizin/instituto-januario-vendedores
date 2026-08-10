@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacidade e uso dos dados — Instituto Januário</title>
+<link rel="stylesheet" href="style.css?v=1">
+<style>
+  .texto { max-width: 640px; margin: 0 auto; padding: 24px 18px 60px; }
+  .texto h1 { font-size: 28px; line-height: 1.25; margin: 0 0 8px; }
+  .texto h2 { font-size: 21px; margin: 32px 0 8px; }
+  .texto p, .texto li { font-size: 17px; }
+  .texto ul { padding-left: 22px; }
+  .texto li { margin-bottom: 8px; }
+  .destaque {
+    background: var(--marcaSuave); border-radius: var(--raio);
+    padding: 16px; margin: 20px 0;
+  }
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="topo-marca">
+    <span class="topo-selo">IJ</span>
+    <span class="topo-nomes">
+      <strong id="hNome">Instituto Januário</strong>
+      <small>Privacidade e uso dos dados</small>
+    </span>
+  </div>
+</header>
+
+<main class="texto">
+  <h1>Como cuidamos dos seus dados</h1>
+  <p>Esta página explica, sem enrolação, o que a gente pede na ficha de
+     pré-matrícula, para que serve e o que você pode exigir da gente.</p>
+
+  <h2>Quem é responsável</h2>
+  <p id="pResponsavel"></p>
+
+  <h2>O que a gente pede</h2>
+  <ul>
+    <li><strong>Do aluno:</strong> nome completo, data de nascimento, sexo, CPF e RG.</li>
+    <li><strong>Para contato:</strong> WhatsApp, e-mail e Instagram (estes dois só se você quiser).</li>
+    <li><strong>Onde mora:</strong> rua, bairro, cidade e estado.</li>
+    <li><strong>Sobre o curso:</strong> qual curso, qual horário e como você ficou sabendo da gente.</li>
+    <li><strong>Se o aluno for menor de 18 anos:</strong> nome, parentesco, CPF e WhatsApp do responsável.</li>
+  </ul>
+
+  <h2>Para que serve</h2>
+  <ul>
+    <li>Entrar em contato com você sobre a matrícula.</li>
+    <li>Informar valores, horários, calendário e documentos necessários.</li>
+    <li>Montar as turmas e reservar a sua vaga.</li>
+    <li>Emitir o certificado no fim do curso.</li>
+  </ul>
+  <p>A gente <strong>não vende</strong> os seus dados e <strong>não passa</strong>
+     para outras empresas fazerem propaganda.</p>
+
+  <h2>Quem consegue ver</h2>
+  <p>Apenas a equipe do Instituto que cuida de matrícula, e o consultor que
+     atendeu você. Os dados ficam numa planilha com acesso controlado.</p>
+  <div class="destaque">
+    <strong>Sobre o WhatsApp:</strong> quando você envia a ficha, abrimos uma
+    conversa no WhatsApp com um resumo. Nessa mensagem <strong>não vai o seu CPF
+    nem o seu RG</strong> — esses dois ficam guardados só na planilha, justamente
+    para não ficarem circulando em celular.
+  </div>
+
+  <h2>Se o aluno for menor de idade</h2>
+  <p>Nesse caso a ficha só pode ser preenchida pelo pai, pela mãe ou por quem for
+     o responsável legal, que precisa marcar a autorização antes de enviar.
+     A lei brasileira (LGPD, artigo 14) exige isso, e a gente cumpre.</p>
+
+  <h2>Por quanto tempo guardamos</h2>
+  <p>Enquanto durar o seu curso e o tempo que a lei exigir para os registros
+     escolares. Fichas de pessoas que se interessaram mas nunca se matricularam
+     são apagadas periodicamente.</p>
+
+  <h2>Seus direitos</h2>
+  <p>A qualquer momento você pode pedir para:</p>
+  <ul>
+    <li>Ver quais dados seus a gente tem.</li>
+    <li>Corrigir algo que esteja errado.</li>
+    <li>Apagar seus dados.</li>
+    <li>Retirar a autorização que você deu.</li>
+  </ul>
+  <p>É só falar com a gente pelo WhatsApp ou ir até a secretaria. Não custa nada
+     e não precisa justificar.</p>
+
+  <h2>Como falar com a gente</h2>
+  <p id="pContato"></p>
+
+  <p style="margin-top:34px"><a href="index.html">← Voltar para a pré-matrícula</a></p>
+</main>
+
+<script src="config.js?v=1"></script>
+<script>
+  document.title = 'Privacidade — ' + INSTITUTO.nome;
+  document.getElementById('hNome').textContent = INSTITUTO.nome;
+
+  document.getElementById('pResponsavel').textContent =
+    `${INSTITUTO.nome} (${INSTITUTO.sigla}), ${INSTITUTO.subtitulo}, ` +
+    `mantido por ${INSTITUTO.parceira}. Endereço: ${INSTITUTO.endereco}, ` +
+    `${INSTITUTO.cidade}/${INSTITUTO.estado}.`;
+
+  const numero = INSTITUTO.whatsappGeral;
+  const legivel = numero.replace(/^55(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+  document.getElementById('pContato').innerHTML =
+    `WhatsApp: <a href="https://wa.me/${numero}" target="_blank" rel="noopener">${legivel}</a>` +
+    `<br>Presencialmente: ${INSTITUTO.endereco}, ${INSTITUTO.cidade}/${INSTITUTO.estado}` +
+    (INSTITUTO.referencia ? ` (${INSTITUTO.referencia})` : '');
+</script>
+</body>
+</html>

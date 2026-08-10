@@ -1,0 +1,159 @@
+================================================================
+SITE DE PRÉ-MATRÍCULA — INSTITUTO JANUÁRIO (IJ-CEP)
+================================================================
+
+ESTE É O SITE DOS VENDEDORES (link de indicação).
+O site público do Instituto é outro projeto, separado.
+
+O que este site faz:
+  - Mostra os cursos e recebe a ficha de pré-matrícula pelo celular.
+  - Mostra NOME E FOTO de quem indicou o aluno.
+  - Manda a ficha para o WHATSAPP DO CURSO, com o nome de quem
+    indicou escrito em destaque na mensagem.
+  - Guarda cada ficha numa planilha, marcada com o vendedor.
+
+
+================================================================
+!! ANTES DE PUBLICAR — CONFERIR COM A KOLLAREZ !!
+================================================================
+
+Tudo abaixo está com valor de exemplo. Precisa confirmar.
+
+[ ] NOMES E FOTOS DOS VENDEDORES SÃO INVENTADOS
+    "Marcos Pereira", "Juliana Marques", "Rafael Nogueira" e
+    "Aline Castro" não existem. As fotos são silhuetas genéricas.
+    Trocar em config.js, seção 4.
+
+[ ] NÚMERO DE WHATSAPP DE CADA CURSO
+    Em config.js, seção 3, cada curso tem um campo "whatsapp".
+    Todos estão vazios, então tudo cai no número geral.
+    Se cada curso tiver um número próprio, preencher lá.
+
+[ ] HORÁRIOS DOS CURSOS
+    Só LIBRAS (Sábados / Domingos) veio da ficha real.
+    Informática, Inglês, Administrativo e Monitor Escolar estão
+    com Manhã/Tarde/Noite por suposição. Confirmar os verdadeiros.
+
+[ ] WHATSAPP GERAL do Instituto está como 5592986139273.
+    Veio de um post do Instagram. Confirmar se é o número certo.
+    (Achei outros dois em circulação: 92 98555-5626 e um número
+     de Goiás, 62 99434-8653, que aparece no catálogo do WhatsApp.
+     Vale alinhar qual é o oficial.)
+
+[ ] LOGO do Instituto. Hoje aparecem só as letras "IJ" num quadrado.
+    Quando tiver o arquivo, colocar em img/ e ajustar o cabeçalho.
+
+[ ] CORES. Está no tema "januario" (azul-marinho e dourado), baseado
+    no material do Instagram. Existem outros dois prontos:
+    "floresta" e "cachoeira". Trocar em config.js, linha do TEMA.
+
+[ ] DESCRIÇÃO DOS CURSOS. Escrevi textos simples a partir do que a
+    Kollarez divulgou. Vale a equipe revisar.
+
+[ ] A PLANILHA AINDA NÃO ESTÁ LIGADA.
+    BACKEND_URL está vazio em config.js. Enquanto estiver assim,
+    o site funciona e abre o WhatsApp, mas NÃO GUARDA NADA.
+    Passo a passo: backend/LEIA-ME-BACKEND.txt
+
+[ ] PARA ONDE VAI CADA FICHA
+    Toda ficha vai para o WhatsApp DO CURSO (config.js, seção 3),
+    nunca para o número do vendedor. O nome de quem indicou vai
+    escrito em destaque dentro da mensagem, assim:
+
+        *INDICADO POR:* Marcos Pereira
+
+    Assim a secretaria recebe tudo num lugar só e já sabe de quem
+    creditar a venda.
+
+
+================================================================
+COMO MEXER NO SITE
+================================================================
+
+Você só precisa editar UM arquivo: config.js
+
+  Seção 1 — nome, endereço, telefone geral, frases da abertura
+  Seção 2 — cores
+  Seção 3 — cursos (adicionar, tirar, mudar horários)
+  Seção 4 — vendedores (nome, foto, telefone)
+  Seção 5 — endereço da planilha
+  Seção 6 — opções de "como ficou sabendo"
+
+NÃO mexa em app.js. Ele só lê o que está no config.js.
+
+IMPORTANTE: depois de editar qualquer arquivo e subir pro site,
+abra o index.html e troque ?v=1 por ?v=2 nas três últimas linhas
+(e no <link> do topo). Sem isso, quem já visitou continua vendo
+a versão antiga.
+
+
+================================================================
+COMO ADICIONAR UM VENDEDOR NOVO
+================================================================
+
+Em config.js, seção 4, copie uma linha e mude:
+
+  { codigo: "carla", nome: "Carla Dias", cargo: "Consultora educacional",
+    genero: "f", foto: "", whatsapp: "5592988887777" },
+
+  codigo   -> sem espaço, sem acento. É o que vai no link (?v=carla)
+  genero   -> "m" ou "f", define a silhueta
+  foto     -> deixe "" para silhueta, ou "img/carla.jpg" se tiver foto
+  whatsapp -> 55 + DDD + número, só números
+
+Depois abra vendedores.html para pegar os links prontos dela.
+
+
+================================================================
+COMO CADA VENDEDOR RECEBE O LINK DELE
+================================================================
+
+Abra vendedores.html (é uma página interna, não aparece no menu).
+Lá tem todos os links prontos, por vendedor e por curso, com botão
+de copiar. É só copiar e mandar no WhatsApp.
+
+Exemplo de link:
+  https://kevinizin.github.io/instituto/?curso=libras&v=marcos
+
+Quando o aluno abre esse link:
+  - A foto e o nome do Marcos aparecem no topo.
+  - O curso de Libras já vem escolhido.
+  - A ficha chega na planilha marcada com "Marcos Pereira".
+
+
+================================================================
+TESTAR NO COMPUTADOR
+================================================================
+
+  node servidor-teste.js
+
+Depois abra http://localhost:4176
+
+
+================================================================
+PUBLICAR
+================================================================
+
+Repositório próprio no GitHub (conta kevinizin), GitHub Pages
+apontando para a branch main, pasta raiz. Mesmo esquema dos
+outros projetos.
+
+Endereço final: https://kevinizin.github.io/instituto/
+
+
+================================================================
+SOBRE OS DADOS DOS ALUNOS
+================================================================
+
+Esta ficha coleta CPF, RG e dados de menor de idade. Três coisas
+que não podem ser ignoradas:
+
+1. A PLANILHA TEM QUE SER DA KOLLAREZ, não sua. Quem responde
+   pelos dados perante a lei é o Instituto.
+
+2. Quando o aluno é menor de 18 anos, o site pede os dados do
+   responsável e exige a autorização dele. Isso não é firula:
+   é o artigo 14 da LGPD.
+
+3. CPF e RG não vão na mensagem de WhatsApp de propósito. Ficam
+   só na planilha, com acesso controlado.

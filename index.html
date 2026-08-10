@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Instituto Januário — Pré-matrícula</title>
+<meta name="description" content="Cursos presenciais em Presidente Figueiredo (AM). Faça sua pré-matrícula pelo celular em poucos minutos.">
+<meta name="theme-color" content="#123a75">
+<!-- Fora do Google de propósito: quem chega aqui vem pelo link do vendedor.
+     Quem procura no Google tem que cair no site público do Instituto. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+
+<a class="pular" href="#inicio">Pular para o conteúdo</a>
+
+<!-- ================= CABEÇALHO ================= -->
+<header class="topo">
+  <div class="topo-marca">
+    <span class="topo-selo" id="topoSelo">IJ</span>
+    <span class="topo-nomes">
+      <strong id="topoNome">Instituto Januário</strong>
+      <small id="topoSub">Centro de Ensino Profissional</small>
+    </span>
+  </div>
+</header>
+
+<main id="inicio">
+
+  <!-- ================= CARTÃO DE QUEM INDICOU ================= -->
+  <!-- Preenchido por app.js quando o link tem ?v=codigo -->
+  <section class="indicacao" id="cartaoIndicacao" hidden aria-live="polite"></section>
+
+  <!-- ================= ABERTURA ================= -->
+  <section class="capa" id="capa">
+    <h1 id="capaTitulo">Comece um curso e mude o seu futuro</h1>
+    <p id="capaApoio">Cursos presenciais em Presidente Figueiredo.</p>
+
+    <div class="capa-passos" aria-hidden="true">
+      <span><b>1</b> Escolha o curso</span>
+      <span><b>2</b> Preencha seus dados</span>
+      <span><b>3</b> A gente te chama</span>
+    </div>
+
+    <button class="botao botao-grande" type="button" id="btnComecar">
+      Quero me inscrever
+    </button>
+
+    <p class="capa-nota">É rápido e não custa nada para se inscrever.</p>
+  </section>
+
+  <!-- ================= FICHA EM PASSOS ================= -->
+  <section class="ficha" id="ficha" hidden>
+
+    <div class="progresso" id="progresso">
+      <div class="progresso-barra"><span id="progressoPreenchido"></span></div>
+      <p class="progresso-texto" id="progressoTexto">Passo 1 de 5</p>
+    </div>
+
+    <form id="formulario" novalidate autocomplete="on">
+
+      <!-- Anti-robô. Fica escondido; pessoa nenhuma vê ou preenche. -->
+      <div class="fora-da-tela" aria-hidden="true">
+        <label for="campoWebsite">Não preencha este campo</label>
+        <input type="text" id="campoWebsite" name="campoWebsite" tabindex="-1" autocomplete="off">
+      </div>
+
+      <!-- PASSO 1 — CURSO -->
+      <fieldset class="passo" id="passo1" data-passo="1">
+        <legend class="passo-titulo">Qual curso você quer fazer?</legend>
+        <p class="passo-ajuda">Toque no curso que você tem interesse.</p>
+        <div class="cursos" id="listaCursos"></div>
+        <p class="erro" id="erroCurso" hidden></p>
+
+        <div class="bloco-condicional" id="blocoTurno" hidden>
+          <h3 class="pergunta">Qual o melhor horário para você?</h3>
+          <p class="dica">Pode marcar mais de um.</p>
+          <div class="opcoes" id="listaTurnos"></div>
+          <p class="erro" id="erroTurno" hidden></p>
+        </div>
+
+        <div class="bloco-condicional" id="blocoFaixa" hidden>
+          <h3 class="pergunta">Qual a idade do aluno?</h3>
+          <p class="dica">As turmas são separadas por idade.</p>
+          <div class="opcoes" id="listaFaixas"></div>
+          <p class="erro" id="erroFaixa" hidden></p>
+        </div>
+      </fieldset>
+
+      <!-- PASSO 2 — DADOS DO ALUNO -->
+      <fieldset class="passo" id="passo2" data-passo="2" hidden>
+        <legend class="passo-titulo">Sobre quem vai estudar</legend>
+
+        <div class="campo">
+          <label for="inNome">Qual o nome completo do aluno?</label>
+          <p class="dica">Nome e sobrenome, como está no documento.</p>
+          <input type="text" id="inNome" name="nome" autocomplete="name"
+                 autocapitalize="words" enterkeyhint="next" required>
+          <p class="erro" hidden></p>
+        </div>
+
+        <div class="campo">
+          <label for="inNascimento">Qual a data de nascimento?</label>
+          <p class="dica">Dia, mês e ano. Exemplo: 15/03/2005</p>
+          <input type="text" id="inNascimento" name="nascimento"
+                 inputmode="numeric" placeholder="__/__/____" maxlength="10"
+                 enterkeyhint="next" required>
+          <p class="erro" hidden></p>
+        </div>
+
+        <div class="campo">
+          <span class="rotulo">Sexo</span>
+          <div class="opcoes opcoes-curtas" id="listaSexo"></div>
+          <p class="erro" id="erroSexo" hidden></p>
+        </div>
+
+        <!-- Aparece sozinho quando o aluno é menor de 18 anos -->
+        <div class="bloco-responsavel" id="blocoResponsavel" hidden>
+          <h3 class="pergunta">O aluno é menor de idade</h3>
+          <p class="dica">Precisamos dos dados do pai, mãe ou responsável.</p>
+
+          <div class="campo">
+            <label for="inRespNome">Nome completo do responsável</label>
+            <input type="text" id="inRespNome" name="responsavelNome"
+                   autocapitalize="words" enterkeyhint="next">
+            <p class="erro" hidden></p>
+          </div>
+
+          <div class="campo">
+            <label for="inRespParentesco">O que é do aluno?</label>
+            <p class="dica">Exemplo: mãe, pai, avó, tia.</p>
+            <input type="text" id="inRespParentesco" name="responsavelParentesco"
+                   autocapitalize="words" enterkeyhint="next">
+            <p class="erro" hidden></p>
+          </div>
+
+          <div class="campo">
+            <label for="inRespTelefone">WhatsApp do responsável</label>
+            <p class="dica">É neste número que a gente vai falar.</p>
+            <input type="tel" id="inRespTelefone" name="responsavelTelefone"
+                   inputmode="numeric" placeholder="(92) 99999-9999" maxlength="15"
+                   enterkeyhint="next">
+            <p class="erro" hidden></p>
+          </div>
+
+          <div class="campo">
+            <label for="inRespCPF">CPF do responsável</label>
+            <input type="text" id="inRespCPF" name="responsavelCPF"
+                   inputmode="numeric" placeholder="000.000.000-00" maxlength="14"
+                   enterkeyhint="next">
+            <p class="erro" hidden></p>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- PASSO 3 — CONTATO -->
+      <fieldset class="passo" id="passo3" data-passo="3" hidden>
+        <legend class="passo-titulo">Como falamos com você</legend>
+
+        <div class="campo">
+          <label for="inTelefone">Qual o seu WhatsApp?</label>
+          <p class="dica">Com o DDD. É por aqui que a gente te responde.</p>
+          <input type="tel" id="inTelefone" name="telefone"
+                 inputmode="numeric" autocomplete="tel"
+                 placeholder="(92) 99999-9999" maxlength="15"
+                 enterkeyhint="next" required>
+          <p class="erro" hidden></p>
+        </div>
+
+        <div class="campo">
+          <label for="inEmail">E-mail <span class="marca-opcional">(se tiver)</span></label>
+          <input type="email" id="inEmail" name="email" autocomplete="email"
+                 inputmode="email" enterkeyhint="next">
+          <button type="button" class="botao-vazio" data-limpa="inEmail">Não tenho e-mail</button>
+          <p class="erro" hidden></p>
+        </div>
+
+        <div class="campo">
+          <label for="inInstagram">Instagram <span class="marca-opcional">(se tiver)</span></label>
+          <input type="text" id="inInstagram" name="instagram"
+                 autocapitalize="none" placeholder="@seuperfil" enterkeyhint="next">
+          <button type="button" class="botao-vazio" data-limpa="inInstagram">Não tenho Instagram</button>
+          <p class="erro" hidden></p>
+        </div>
+
+        <div class="campo">
+          <label for="inRua">Rua ou avenida onde você mora</label>
+          <input type="text" id="inRua" name="rua" autocomplete="address-line1"
+                 autocapitalize="words" enterkeyhint="next" required>
+          <p class="erro" hidden></p>
+        </div>
+
+        <div class="campo">
+          <label for="inBairro">Bairro</label>
+          <input type="text" id="inBairro" name="bairro"
+                 autocapitalize="words" enterkeyhint="next" required>
+          <p class="erro" hidden></p>
+        </div>
+
+        <div class="dupla">
+          <div class="campo">
+            <label for="inCidade">Cidade</label>
+            <input type="text" id="inCidade" name="cidade"
+                   autocapitalize="words" enterkeyhint="next" required>
+            <p class="erro" hidden></p>
+          </div>
+          <div class="campo campo-curto">
+            <label for="inEstado">Estado</label>
+            <input type="text" id="inEstado" name="estado" maxlength="2"
+                   autocapitalize="characters" enterkeyhint="next" required>
+            <p class="erro" hidden></p>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- PASSO 4 — DOCUMENTOS -->
+      <fieldset class="passo" id="passo4" data-passo="4" hidden>
+        <legend class="passo-titulo">Documentos do aluno</legend>
+        <p class="passo-ajuda">Se não tiver agora, tudo bem — é só avisar no botão.</p>
+
+        <div class="campo">
+          <label for="inCPF">CPF do aluno</label>
+          <p class="dica">Só os números, a gente coloca os pontos.</p>
+          <input type="text" id="inCPF" name="cpf"
+                 inputmode="numeric" placeholder="000.000.000-00" maxlength="14"
+                 enterkeyhint="next">
+          <button type="button" class="botao-vazio" data-naotenho="inCPF">Não tenho CPF agora</button>
+          <p class="erro" hidden></p>
+        </div>
+
+        <div class="campo">
+          <label for="inRG">RG do aluno</label>
+          <input type="text" id="inRG" name="rg" enterkeyhint="next">
+          <button type="button" class="botao-vazio" data-naotenho="inRG">Não tenho RG agora</button>
+          <p class="erro" hidden></p>
+        </div>
+
+        <div class="campo">
+          <span class="rotulo">Como você ficou sabendo do curso?</span>
+          <div class="opcoes" id="listaOrigens"></div>
+          <p class="erro" id="erroOrigem" hidden></p>
+        </div>
+
+        <div class="campo" id="campoOrigemOutro" hidden>
+          <label for="inOrigemOutro">Conta pra gente como foi</label>
+          <input type="text" id="inOrigemOutro" name="comoSoubeOutro" enterkeyhint="next">
+          <p class="erro" hidden></p>
+        </div>
+
+        <!-- Só aparece quando o link não trouxe o vendedor -->
+        <div class="campo" id="campoQuemAtendeu" hidden>
+          <span class="rotulo">Alguém do Instituto falou com você sobre o curso?</span>
+          <p class="dica">Assim a gente sabe quem te atendeu.</p>
+          <div class="opcoes" id="listaQuemAtendeu"></div>
+          <p class="erro" id="erroQuemAtendeu" hidden></p>
+        </div>
+      </fieldset>
+
+      <!-- PASSO 5 — CONFERIR E ENVIAR -->
+      <fieldset class="passo" id="passo5" data-passo="5" hidden>
+        <legend class="passo-titulo">Confira antes de enviar</legend>
+        <p class="passo-ajuda">Leia com calma. Se algo estiver errado, toque em "corrigir".</p>
+
+        <div class="revisao" id="revisao"></div>
+
+        <div class="bloco-vendedor-revisao" id="revisaoVendedor"></div>
+
+        <div class="consentimentos">
+          <label class="consentimento">
+            <input type="checkbox" id="chkContato" name="consenteContato">
+            <span>Autorizo o Instituto Januário a entrar em contato comigo para falar sobre a matrícula, turmas, valores, calendário e documentos.</span>
+          </label>
+          <p class="erro" id="erroContato" hidden></p>
+
+          <label class="consentimento">
+            <input type="checkbox" id="chkDados" name="consenteDados">
+            <span>Concordo que meus dados sejam guardados pelo Instituto para tratar da minha matrícula. <a href="privacidade.html" target="_blank" rel="noopener">Ver como cuidamos dos seus dados</a>.</span>
+          </label>
+          <p class="erro" id="erroDados" hidden></p>
+
+          <label class="consentimento" id="consentimentoResponsavel" hidden>
+            <input type="checkbox" id="chkResponsavel" name="consenteResponsavel">
+            <span>Declaro que sou o responsável legal pelo aluno menor de idade e autorizo esta pré-matrícula.</span>
+          </label>
+          <p class="erro" id="erroRespDecl" hidden></p>
+        </div>
+
+        <button class="botao botao-grande botao-enviar" type="submit" id="btnEnviar">
+          Enviar minha pré-matrícula
+        </button>
+        <p class="capa-nota">Depois de enviar, o WhatsApp abre sozinho para você falar com a gente.</p>
+      </fieldset>
+
+      <!-- NAVEGAÇÃO ENTRE PASSOS -->
+      <nav class="navegacao" id="navegacao">
+        <button class="botao botao-secundario" type="button" id="btnVoltar">Voltar</button>
+        <button class="botao" type="button" id="btnContinuar">Continuar</button>
+      </nav>
+
+    </form>
+  </section>
+
+  <!-- ================= TELA DE SUCESSO ================= -->
+  <section class="sucesso" id="sucesso" hidden aria-live="polite">
+    <div class="sucesso-marca">✓</div>
+    <h2>Pronto! Recebemos sua pré-matrícula.</h2>
+    <p class="sucesso-nome" id="sucessoNome"></p>
+
+    <div class="sucesso-proximos">
+      <h3>O que acontece agora</h3>
+      <ol>
+        <li>O WhatsApp abre com sua mensagem já escrita — é só tocar em enviar.</li>
+        <li>A nossa equipe confirma sua vaga e explica valores e horários.</li>
+        <li>Você recebe a lista de documentos para fechar a matrícula.</li>
+      </ol>
+    </div>
+
+    <a class="botao botao-grande botao-zap" id="linkZapReserva" href="#" target="_blank" rel="noopener">
+      O WhatsApp não abriu? Toque aqui
+    </a>
+
+    <button class="botao botao-secundario" type="button" id="btnNovaFicha">
+      Fazer outra pré-matrícula
+    </button>
+  </section>
+
+</main>
+
+<!-- ================= RODAPÉ ================= -->
+<footer class="rodape">
+  <p><strong id="rodapeNome">Instituto Januário</strong> <span id="rodapeSigla"></span></p>
+  <p id="rodapeEndereco"></p>
+  <p id="rodapeParceria"></p>
+  <p><a href="privacidade.html">Privacidade e uso dos dados</a></p>
+</footer>
+
+<script src="config.js?v=1"></script>
+<script src="avatars.js?v=1"></script>
+<script src="app.js?v=1"></script>
+</body>
+</html>

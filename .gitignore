@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Nada de credencial ou certificado neste repositório
+*.pfx
+*.pem
+*.key
+*.p12
+.env

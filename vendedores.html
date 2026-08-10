@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Links dos consultores — Instituto Januário</title>
+<link rel="stylesheet" href="style.css?v=1">
+<style>
+  .painel { max-width: 760px; margin: 0 auto; padding: 22px 18px 60px; }
+  .painel h1 { font-size: 28px; margin: 0 0 6px; }
+  .painel .aviso {
+    background: var(--marcaSuave); border-radius: var(--raio);
+    padding: 16px; margin: 18px 0 26px; font-size: 16px;
+  }
+  .vend {
+    background: var(--caixa); border: 1px solid var(--borda);
+    border-radius: var(--raio); padding: 18px; margin-bottom: 18px;
+  }
+  .vend-topo { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .vend-topo img {
+    width: 56px; height: 56px; border-radius: 50%;
+    border: 2px solid var(--marca2); flex: none;
+  }
+  .vend-topo strong { display: block; font-size: 19px; }
+  .vend-topo span { color: var(--texto2); font-size: 15px; }
+  .link-linha {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 0; border-top: 1px solid var(--borda);
+    flex-wrap: wrap;
+  }
+  .link-curso { font-weight: 700; flex: 1 1 180px; font-size: 16px; }
+  .link-url {
+    flex: 1 1 100%; font-size: 13px; color: var(--texto2);
+    overflow-wrap: anywhere; font-family: ui-monospace, Consolas, monospace;
+  }
+  .btn-copiar {
+    min-height: 42px; padding: 8px 16px; flex: none;
+    background: var(--marca); color: #fff; border: none;
+    border-radius: 10px; font-family: inherit; font-size: 15px;
+    font-weight: 700; cursor: pointer;
+  }
+  .btn-copiar[data-copiado="1"] { background: var(--ok); }
+  .base {
+    width: 100%; min-height: 48px; padding: 12px 14px;
+    border: 2px solid var(--borda); border-radius: var(--raio);
+    font-size: 16px; font-family: inherit; margin-bottom: 26px;
+  }
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="topo-marca">
+    <span class="topo-selo">IJ</span>
+    <span class="topo-nomes">
+      <strong>Links dos consultores</strong>
+      <small>Uso interno — não divulgar esta página</small>
+    </span>
+  </div>
+</header>
+
+<main class="painel">
+  <h1>Link de cada consultor</h1>
+  <p class="aviso">
+    Cada consultor tem um link diferente para cada curso. Quando o aluno abre
+    esse link, o nome e a foto do consultor aparecem na tela, e a ficha já
+    chega na planilha marcada com o nome dele.
+    <br><br>
+    Mande o link pelo WhatsApp normalmente. Toque em <strong>Copiar</strong>.
+  </p>
+
+  <label for="base"><strong>Endereço do site</strong></label>
+  <p class="dica">Se o site mudar de endereço, altere aqui e os links abaixo se ajustam.</p>
+  <input class="base" id="base" type="text">
+
+  <div id="lista"></div>
+</main>
+
+<script src="config.js?v=1"></script>
+<script src="avatars.js?v=1"></script>
+<script>
+(function () {
+  const campoBase = document.getElementById('base');
+  const lista = document.getElementById('lista');
+
+  campoBase.value = location.href.replace(/vendedores\.html.*$/, '');
+
+  function montar() {
+    const base = campoBase.value.trim().replace(/\/?$/, '/');
+    const ativos = CURSOS.filter(c => c.ativo);
+
+    lista.innerHTML = VENDEDORES.map(v => `
+      <div class="vend">
+        <div class="vend-topo">
+          <img src="${avatarDe(v)}" alt="">
+          <div>
+            <strong>${v.nome}</strong>
+            <span>${v.cargo} · código: ${v.codigo}</span>
+          </div>
+        </div>
+        ${ativos.map(c => {
+          const url = `${base}?curso=${c.id}&v=${v.codigo}`;
+          return `<div class="link-linha">
+                    <span class="link-curso">${c.icone} ${c.nome}</span>
+                    <button class="btn-copiar" type="button" data-url="${url}">Copiar</button>
+                    <span class="link-url">${url}</span>
+                  </div>`;
+        }).join('')}
+        <div class="link-linha">
+          <span class="link-curso">🔗 Link geral (todos os cursos)</span>
+          <button class="btn-copiar" type="button" data-url="${base}?v=${v.codigo}">Copiar</button>
+          <span class="link-url">${base}?v=${v.codigo}</span>
+        </div>
+      </div>`).join('');
+
+    lista.querySelectorAll('.btn-copiar').forEach(b => {
+      b.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(b.dataset.url);
+        } catch (_) {
+          prompt('Copie o link abaixo:', b.dataset.url);
+          return;
+        }
+        b.textContent = 'Copiado!';
+        b.dataset.copiado = '1';
+        setTimeout(() => { b.textContent = 'Copiar'; b.dataset.copiado = '0'; }, 1800);
+      });
+    });
+  }
+
+  campoBase.addEventListener('input', montar);
+  montar();
+})();
+</script>
+</body>
+</html>

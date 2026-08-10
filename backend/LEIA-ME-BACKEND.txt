@@ -1,0 +1,147 @@
+================================================================
+COMO LIGAR A PLANILHA QUE RECEBE AS FICHAS
+Instituto Januário (IJ-CEP)
+================================================================
+
+O site funciona sem isto: o WhatsApp abre normalmente.
+Mas sem a planilha nada fica guardado, e não dá para contar
+quantos alunos cada vendedor trouxe.
+
+Leva uns 10 minutos, uma vez só.
+
+
+----------------------------------------------------------------
+ANTES DE COMEÇAR — LEIA ESTA PARTE
+----------------------------------------------------------------
+
+A planilha PRECISA ser criada numa conta Google DA KOLLAREZ,
+não na sua conta pessoal.
+
+Motivo: os dados são de alunos (CPF, RG, endereço). Quem responde
+por eles perante a lei é a Kollarez, não quem fez o site. Além
+disso, se a planilha ficar na sua conta e um dia você sair, o
+site para de guardar as fichas.
+
+Você pode ser adicionado como Editor depois. Só não seja o dono.
+
+
+----------------------------------------------------------------
+PASSO 1 — CRIAR A PLANILHA
+----------------------------------------------------------------
+
+1. Entre na conta Google da Kollarez.
+2. Vá em sheets.google.com e crie uma planilha em branco.
+3. Dê o nome: "IJ-CEP — Pré-matrículas".
+4. Olhe o endereço da planilha na barra do navegador. Ele é assim:
+
+   https://docs.google.com/spreadsheets/d/1AbC...XyZ/edit
+
+   A parte entre /d/ e /edit é o ID. Copie ela.
+
+Não precisa criar aba nem cabeçalho: o script faz isso sozinho
+na primeira ficha que chegar.
+
+
+----------------------------------------------------------------
+PASSO 2 — COLAR O SCRIPT
+----------------------------------------------------------------
+
+1. Na planilha, menu Extensões > Apps Script.
+2. Apague o que estiver escrito lá.
+3. Abra o arquivo Code.gs (que está nesta mesma pasta),
+   copie tudo e cole no editor.
+4. Na primeira linha, troque COLE_AQUI_O_ID_DA_PLANILHA
+   pelo ID que você copiou no Passo 1. Mantenha as aspas.
+5. Salve (ícone de disquete).
+
+
+----------------------------------------------------------------
+PASSO 3 — PUBLICAR
+----------------------------------------------------------------
+
+1. Botão azul "Implantar" > "Nova implantação".
+2. Na engrenagem, escolha o tipo "App da Web".
+3. Preencha assim:
+
+     Executar como .......... Eu (a conta dona da planilha)
+     Quem pode acessar ...... Qualquer pessoa
+
+   O "qualquer pessoa" assusta, mas é necessário: quem envia a
+   ficha é um visitante do site, que não tem conta Google. Ele
+   só consegue ADICIONAR uma linha — nunca ler o que já existe.
+
+4. Clique em Implantar.
+5. O Google vai pedir autorização. Aceite.
+   Se aparecer "app não verificado", clique em "Avançado" e
+   depois em "Acessar (não seguro)". É o seu próprio script.
+6. Copie o endereço que termina em /exec.
+
+
+----------------------------------------------------------------
+PASSO 4 — LIGAR NO SITE
+----------------------------------------------------------------
+
+Abra o arquivo config.js do site e cole o endereço:
+
+    const BACKEND_URL = "https://script.google.com/.../exec";
+
+Pronto.
+
+
+----------------------------------------------------------------
+PASSO 5 — TESTAR ANTES DE SOLTAR PARA OS VENDEDORES
+----------------------------------------------------------------
+
+Faça uma pré-matrícula de mentira no site, do começo ao fim.
+Depois confira na planilha se a linha apareceu com tudo certo.
+
+NÃO distribua os links dos vendedores antes disso funcionar.
+
+
+----------------------------------------------------------------
+PASSO 6 — A ABA QUE MOSTRA QUEM VENDEU MAIS
+----------------------------------------------------------------
+
+Crie uma segunda aba chamada "Painel" e cole as fórmulas abaixo.
+Elas se atualizam sozinhas conforme as fichas chegam.
+
+Em A1 (quantos alunos cada vendedor trouxe):
+
+  =QUERY(Leads!A2:AC; "select S, count(S) where S <> '' group by S order by count(S) desc label count(S) 'Alunos'")
+
+Em D1 (quantos alunos por curso):
+
+  =QUERY(Leads!A2:AC; "select B, count(B) where B <> '' group by B order by count(B) desc label count(B) 'Alunos'")
+
+Se o Google reclamar do ponto e vírgula, troque por vírgula
+(depende da configuração de idioma da conta).
+
+
+----------------------------------------------------------------
+DUAS COLUNAS PARECIDAS — POR QUE?
+----------------------------------------------------------------
+
+"Vendedor"                 -> quem a pessoa confirmou na tela.
+                              É esta que vale para bater cota.
+
+"Código que veio no link"  -> o que estava no link que ela abriu.
+
+Quase sempre são iguais. Quando forem diferentes, é sinal de
+link errado, link repassado ou a pessoa trocou na hora.
+Guardar as duas deixa você corrigir depois, em vez de perder a
+informação para sempre.
+
+
+----------------------------------------------------------------
+CUIDADOS COM OS DADOS
+----------------------------------------------------------------
+
+- Compartilhe a planilha só com quem precisa. Nunca deixe como
+  "qualquer pessoa com o link pode ver".
+- CPF e RG ficam SÓ na planilha. Eles não vão na mensagem de
+  WhatsApp de propósito, para não ficarem espalhados em celular
+  de vendedor.
+- De tempos em tempos, apague as fichas antigas que nunca viraram
+  matrícula. Guardar dado que não serve mais é risco à toa.
+- Se um aluno pedir para apagar os dados dele, apague a linha.
+  É um direito dele.
