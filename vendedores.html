@@ -18,10 +18,15 @@
     border-radius: var(--raio); padding: 18px; margin-bottom: 18px;
   }
   .vend-topo { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
-  .vend-topo img {
-    width: 56px; height: 56px; border-radius: 50%;
-    border: 2px solid var(--marca2); flex: none;
+  .vend-retrato {
+    width: 56px; height: 56px; flex: none;
+    border-radius: 50%; overflow: hidden; position: relative;
+    display: grid; place-items: center;
+    background: var(--marca);
+    box-shadow: 0 0 0 2px var(--marca2);
   }
+  .vend-retrato .retrato-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .vend-retrato .retrato-monograma { color: var(--marca2Clara); font-weight: 800; font-size: 18px; }
   .vend-topo strong { display: block; font-size: 19px; }
   .vend-topo span { color: var(--texto2); font-size: 15px; }
   .link-linha {
@@ -77,8 +82,8 @@
   <div id="lista"></div>
 </main>
 
-<script src="config.js?v=1"></script>
-<script src="avatars.js?v=1"></script>
+<script src="config.js?v=2"></script>
+<script src="marca.js?v=2"></script>
 <script>
 (function () {
   const campoBase = document.getElementById('base');
@@ -93,7 +98,7 @@
     lista.innerHTML = VENDEDORES.map(v => `
       <div class="vend">
         <div class="vend-topo">
-          <img src="${avatarDe(v)}" alt="">
+          <span class="vend-retrato">${MARCA.retrato(v)}</span>
           <div>
             <strong>${v.nome}</strong>
             <span>${v.cargo} · código: ${v.codigo}</span>
@@ -102,7 +107,7 @@
         ${ativos.map(c => {
           const url = `${base}?curso=${c.id}&v=${v.codigo}`;
           return `<div class="link-linha">
-                    <span class="link-curso">${c.icone} ${c.nome}</span>
+                    <span class="link-curso">${c.nome}</span>
                     <button class="btn-copiar" type="button" data-url="${url}">Copiar</button>
                     <span class="link-url">${url}</span>
                   </div>`;

@@ -1,14 +1,18 @@
 /* ==========================================================================
-   CONFIG — Instituto Januário (IJ-CEP)
+   INSTITUTO JANUÁRIO — FICHA DE PRÉ-MATRÍCULA
+   config.js — TUDO que muda fica aqui. Não precisa mexer no app.js.
 
-   ESTE É O ÚNICO ARQUIVO QUE VOCÊ PRECISA EDITAR.
-   Trocar nomes, cores, cursos, vendedores e telefones é tudo aqui.
-   Não mexa em app.js — ele só lê o que está escrito abaixo.
+   Se você não programa: mexa só no texto entre aspas.
+   Não apague vírgulas, chaves { } nem colchetes [ ].
+
+   Os dados abaixo vieram do calendário oficial de turmas e dos panfletos
+   do Instituto. Onde estiver escrito CONFERIR, é porque o material tinha
+   informação faltando ou divergente.
    ========================================================================== */
 
 
 /* --------------------------------------------------------------------------
-   1) DADOS DO INSTITUTO
+   1) IDENTIDADE E CONTATO
    -------------------------------------------------------------------------- */
 const INSTITUTO = {
   nome: "Instituto Januário",
@@ -16,231 +20,322 @@ const INSTITUTO = {
   subtitulo: "Centro de Ensino Profissional",
   parceira: "Kollarez Soluções e Comércio",
 
-  // Número usado quando o curso não tiver um número próprio (seção 3).
+  // Número que recebe as fichas quando o curso não tiver um número próprio.
   // Formato: 55 + DDD + número, só dígitos.
   whatsappGeral: "5592984456744",
+  whatsappVisivel: "(92) 98445-6744",
 
   cidade: "Presidente Figueiredo",
   estado: "AM",
-
-  // CONFERIR: os panfletos do Instituto trazem dois números de rua
-  // diferentes — nº 272 (cursos técnicos) e nº 153 (curso de Inglês).
-  endereco: "Rua Gaivota, nº 153 — Bairro Orquídeas",
-  referencia: "",
+  endereco: "Rua Gaivota, nº 272 — Bairro Orquídeas",
+  referencia: "ao lado da Borracharia",
   instagram: "kollarez.solucoes.ofc",
 
-  // Frase grande da abertura do site
-  chamada: "Comece um curso e mude o seu futuro",
-  apoio: "Cursos presenciais em Presidente Figueiredo. Faça sua pré-matrícula pelo celular, em poucos minutos."
+  // Frase grande da abertura
+  chamada: "Sua vaga começa aqui",
+  apoio: "Cursos presenciais em Presidente Figueiredo. Preencha pelo celular em dois minutos e a gente te chama no WhatsApp."
 };
 
 
 /* --------------------------------------------------------------------------
    2) CORES
-   Troque o TEMA para "januario", "floresta" ou "cachoeira".
+   Amostradas pixel a pixel do material impresso do Instituto.
+   Trocar o TEMA troca o site inteiro de cor.
    -------------------------------------------------------------------------- */
-const TEMA = "januario";
-
 const PALETAS = {
   januario: {
-    "--fundo":     "#f4f6fb",
-    "--caixa":     "#ffffff",
-    "--texto":     "#16213e",
-    "--texto2":    "#5a6785",
-    "--borda":     "#dbe2f0",
-    "--marca":     "#123a75",
-    "--marca2":    "#c9992e",
-    "--marcaSuave":"#e8effa",
-    "--ok":        "#1a7f4b",
-    "--erro":      "#c0392b"
-  },
-  floresta: {
-    "--fundo":     "#f2f7f3",
-    "--caixa":     "#ffffff",
-    "--texto":     "#12291c",
-    "--texto2":    "#4d6655",
-    "--borda":     "#d3e3d8",
-    "--marca":     "#1d6b3f",
-    "--marca2":    "#d0a227",
-    "--marcaSuave":"#e3f1e8",
-    "--ok":        "#1a7f4b",
-    "--erro":      "#c0392b"
-  },
-  cachoeira: {
-    "--fundo":     "#f1f7fa",
-    "--caixa":     "#ffffff",
-    "--texto":     "#0f2b38",
-    "--texto2":    "#4c6b78",
-    "--borda":     "#d2e4ec",
-    "--marca":     "#0e6079",
-    "--marca2":    "#e0a83c",
-    "--marcaSuave":"#e0f0f6",
-    "--ok":        "#1a7f4b",
-    "--erro":      "#c0392b"
+    "--fundo":      "#eef1f7",
+    "--caixa":      "#ffffff",
+    "--texto":      "#0C1A3C",
+    "--texto2":     "#5a6785",
+    "--borda":      "#d8dfec",
+    "--marca":      "#0C1A3C",
+    "--marcaClara": "#1B4F9C",
+    "--marca2":     "#D9A22B",
+    "--marca2Clara":"#F0C25A",
+    "--marcaSuave": "#e7ecf6",
+    "--ok":         "#1a7f4b",
+    "--erro":       "#c0392b"
   }
 };
+const TEMA = "januario";
 
 
 /* --------------------------------------------------------------------------
    3) CURSOS
 
-   id        → aparece no link do site (?curso=libras)
-   whatsapp  → NÚMERO QUE RECEBE AS FICHAS DESTE CURSO.
-               Toda pré-matrícula vai para cá, com o nome de quem indicou
-               escrito na mensagem. Deixe "" para usar o número geral.
-               Formato: 55 + DDD + número, só dígitos.
-   turnos    → opções que a pessoa escolhe. Se vazio, não pergunta turno.
-   extra     → "faixaEtaria" mostra as turmas por idade (usado só no Inglês)
-   ativo     → false esconde o curso do site sem apagar nada
-
-   ATENÇÃO: só os turnos de LIBRAS vieram da ficha real do Instituto.
-   Os demais estão como Manhã/Tarde/Noite por suposição — confirmar.
-   Os números por curso também precisam ser confirmados.
+   id         → aparece no link (?curso=informatica)
+   ilustra    → qual desenho usar (ver marca.js)
+   whatsapp   → número que recebe as fichas DESTE curso.
+                Vazio "" usa o número geral lá de cima.
+   turmas     → os horários reais. O aluno pode marcar mais de um.
+                  id      = número da turma no calendário oficial
+                  dias    = os dias da semana
+                  horario = a faixa de hora
+                  vagas   = quantas vagas a turma tem
+   escolha    → "horario" (padrão) ou "modalidade", para os cursos EAD
+   precos     → o que aparece no cartão do curso
+   extra      → "faixaEtaria" mostra as turmas por idade (só no Inglês)
+   ativo      → false esconde o curso sem apagar nada
    -------------------------------------------------------------------------- */
 const CURSOS = [
+
   {
     id: "informatica",
     nome: "Informática e Empregabilidade",
     chamada: "Do zero ao mercado de trabalho",
-    descricao: "Aprenda a usar o computador desde o começo: ligar, digitar, internet, e-mail, Word e Excel. No final, você sai preparado para vagas que pedem informática.",
-    icone: "💻",
+    descricao: "Aprenda a usar o computador desde o começo: ligar, digitar, internet, e-mail, Word e Excel. No final, você sai preparado para as vagas que pedem informática.",
+    paraQuem: "Para trabalhar em escritório, comércio e atendimento",
+    ilustra: "informatica",
     whatsapp: "",
-    turnos: ["Manhã", "Tarde", "Noite"],
-    extra: null,
-    ativo: true
-  },
-  {
-    id: "libras",
-    nome: "Leitura e Interpretação de Libras",
-    chamada: "Do zero ao intermediário",
-    descricao: "Aprenda a Língua Brasileira de Sinais e consiga se comunicar com pessoas surdas. Começa do zero, não precisa saber nada antes.",
-    icone: "🤟",
-    whatsapp: "",
-    turnos: ["Sábados", "Domingos"],
-    extra: null,
-    ativo: true
-  },
-  {
-    id: "ingles",
-    nome: "Inglês e Empregabilidade",
-    chamada: "Turmas separadas por idade",
-    descricao: "Inglês do começo, com turmas para crianças, adolescentes e adultos. Focado em conversação e no que o mercado de trabalho pede.",
-    icone: "🌎",
-    whatsapp: "",
-    turnos: ["Manhã", "Tarde", "Noite"],
-    extra: "faixaEtaria",
-    ativo: true
-  },
-  {
-    id: "administrativo",
-    nome: "Assistente Administrativo e Financeiro",
-    chamada: "Prática direto no computador",
-    descricao: "Aprenda a cuidar de contas, notas, planilhas e atendimento. Aulas práticas no computador, do jeito que se faz numa empresa de verdade.",
-    icone: "📊",
-    whatsapp: "",
-    turnos: ["Manhã", "Tarde", "Noite"],
-    extra: null,
-    ativo: true
-  },
-  {
-    id: "monitor",
-    nome: "Monitor Escolar",
-    chamada: "100% presencial",
-    descricao: "Formação para quem quer trabalhar em escola acompanhando alunos, apoiando professores e cuidando da rotina escolar.",
-    icone: "🏫",
-    whatsapp: "",
-    turnos: ["Manhã", "Tarde", "Noite"],
+    duracao: "6 meses",
+    cargaHoraria: "144 horas",
+    ritmo: "3 aulas por semana, de 2 horas cada",
+    escolha: "horario",
+    turmas: [
+      { id: "01", dias: "Seg, Qua e Sex", horario: "08:00 às 09:50", vagas: 10 },
+      { id: "02", dias: "Seg, Qua e Sex", horario: "10:00 às 11:50", vagas: 10 },
+      { id: "03", dias: "Seg, Qua e Sex", horario: "13:00 às 14:50", vagas: 10 },
+      { id: "04", dias: "Seg, Qua e Sex", horario: "15:00 às 16:50", vagas: 10 },
+      { id: "05", dias: "Seg, Qua e Sex", horario: "18:00 às 19:50", vagas: 10 },
+      { id: "06", dias: "Seg, Qua e Sex", horario: "20:00 às 21:50", vagas: 10 },
+      { id: "11", dias: "Ter, Qui e Sáb", horario: "18:00 às 19:50", vagas: 10 }
+    ],
+    precos: {
+      matricula: "R$ 50,00",
+      linhas: [
+        { rotulo: "1º ao 3º mês", valor: "R$ 129,90" },
+        { rotulo: "4º ao 6º mês", valor: "R$ 150,00" }
+      ]
+    },
     extra: null,
     ativo: true
   },
 
-  /* --- Cursos que já rolaram. Vire ativo:true para voltarem ao site. --- */
   {
-    id: "tecnico-adm",
-    nome: "Técnico em Administração",
-    chamada: "Curso técnico com diploma",
-    descricao: "",
-    icone: "📋",
+    id: "ingles",
+    nome: "Inglês e Empregabilidade",
+    chamada: "Do básico ao avançado",
+    descricao: "Conversação desde as primeiras aulas, gramática na prática, pronúncia e inglês para o trabalho. Turmas separadas por idade.",
+    paraQuem: "Para quem quer falar inglês e crescer no trabalho",
+    ilustra: "ingles",
     whatsapp: "",
-    turnos: [],
-    extra: null,
-    ativo: false
+    duracao: "6 meses",
+    cargaHoraria: "144 horas",
+    ritmo: "3 aulas por semana, de 2 horas cada",
+    escolha: "horario",
+    turmas: [
+      { id: "08", dias: "Ter, Qui e Sáb", horario: "10:00 às 12:00", vagas: 10 },
+      { id: "09", dias: "Ter, Qui e Sáb", horario: "13:00 às 15:00", vagas: 10 },
+      { id: "12", dias: "Ter, Qui e Sáb", horario: "20:00 às 22:00", vagas: 10 }
+    ],
+    precos: {
+      matricula: "R$ 50,00",
+      linhas: [
+        { rotulo: "1º ao 3º mês", valor: "R$ 129,90" },
+        { rotulo: "4º ao 6º mês", valor: "R$ 150,00" }
+      ]
+    },
+    // A turma infantil tem regra própria: não paga matrícula e a
+    // mensalidade é outra. Vem do panfleto do Inglês Infantil.
+    precosInfantil: {
+      matricula: "grátis",
+      linhas: [
+        { rotulo: "Mensalidade", valor: "R$ 200,00" }
+      ],
+      nota: "Material didático incluso (apostila)."
+    },
+    extra: "faixaEtaria",
+    ativo: true
   },
+
   {
-    id: "nr6",
-    nome: "NR-6 — Segurança do Trabalho",
-    chamada: "Parceria Polo Fametro",
-    descricao: "",
-    icone: "🦺",
+    id: "monitor",
+    nome: "Monitor Escolar",
+    chamada: "Preparação para concurso público",
+    descricao: "Qualificação profissional para trabalhar em escola: acompanhamento de alunos, apoio ao professor e rotina escolar. Também prepara para concurso.",
+    paraQuem: "Para trabalhar em escola e creche",
+    ilustra: "monitor",
     whatsapp: "",
-    turnos: [],
+    duracao: "6 meses",
+    cargaHoraria: "144 horas",
+    ritmo: "3 aulas por semana, de 2 horas cada",
+    escolha: "horario",
+    turmas: [
+      { id: "07", dias: "Ter, Qui e Sáb", horario: "08:00 às 09:50", vagas: 10 },
+      { id: "12", dias: "Ter, Qui e Sáb", horario: "20:00 às 22:00", vagas: 10 }
+    ],
+    precos: {
+      matricula: "R$ 50,00",
+      linhas: [
+        { rotulo: "1º ao 3º mês", valor: "R$ 129,90" },
+        { rotulo: "4º ao 6º mês", valor: "R$ 150,00" }
+      ]
+    },
     extra: null,
-    ativo: false
+    ativo: true
   },
+
   {
-    id: "supletivo",
-    nome: "Ensino Médio (conclusão)",
-    chamada: "Termine seus estudos",
-    descricao: "",
-    icone: "🎓",
+    id: "administrativo",
+    nome: "Assistente Administrativo e Financeiro",
+    chamada: "Curso rápido, prática no computador",
+    descricao: "Contas a pagar e receber, notas, planilhas, atendimento e rotina de escritório. Aulas práticas direto no computador.",
+    paraQuem: "Para trabalhar em escritório, loja e setor financeiro",
+    ilustra: "administrativo",
     whatsapp: "",
-    turnos: [],
+    duracao: "1 mês e meio",
+    cargaHoraria: "14 aulas — 42 horas",
+    ritmo: "3 aulas por semana, de 2 horas cada",
+    escolha: "horario",
+    turmas: [
+      { id: "10", dias: "Ter, Qui e Sáb", horario: "15:00 às 17:00", vagas: 10 }
+    ],
+    precos: {
+      matricula: "R$ 50,00",
+      linhas: [
+        { rotulo: "À vista", valor: "R$ 270,00" },
+        { rotulo: "Ou no boleto", valor: "3x R$ 99,90" }
+      ]
+    },
     extra: null,
-    ativo: false
+    ativo: true
+  },
+
+  {
+    id: "libras",
+    nome: "Leitura e Interpretação de Libras",
+    chamada: "Um encontro por semana, dia inteiro",
+    descricao: "Alfabeto, conversação, gramática da Libras, cultura surda e prática de interpretação. Comunique-se com pessoas surdas e abra portas em escola, saúde e atendimento.",
+    paraQuem: "Para trabalhar em escola, saúde e atendimento ao público",
+    ilustra: "libras",
+    whatsapp: "",
+    duracao: "6 meses",
+    cargaHoraria: "144 horas",
+    ritmo: "4 encontros por mês, de 8 horas cada",
+    escolha: "horario",
+    turmas: [
+      { id: "A", dias: "Todos os sábados", horario: "08:00 às 17:00", vagas: 15, nota: "Almoço das 12:00 às 13:00" },
+      { id: "B", dias: "Todos os domingos", horario: "08:00 às 17:00", vagas: 15, nota: "Almoço das 12:00 às 13:00" }
+    ],
+    precos: {
+      matricula: "R$ 50,00",
+      linhas: [
+        { rotulo: "Mensalidade", valor: "R$ 197,00" }
+      ],
+      nota: "Também dá para pagar à vista com desconto ou em 6x no cartão, sem juros."
+    },
+    extra: null,
+    ativo: true
+  },
+
+  /* ---- CURSOS TÉCNICOS — 100% EAD, diploma reconhecido no Brasil ----
+     Aqui o aluno não escolhe horário, escolhe o caminho. Por isso
+     escolha: "modalidade".
+     CONFERIR: os valores dos técnicos não estavam no material. */
+  {
+    id: "eletrotecnica",
+    nome: "Técnico em Eletrotécnica",
+    chamada: "Diploma reconhecido em todo o Brasil",
+    descricao: "Curso técnico 100% EAD. Você estuda de onde estiver, no seu tempo, e recebe diploma de técnico.",
+    paraQuem: "Para trabalhar com energia, instalações e manutenção elétrica",
+    ilustra: "generico",
+    whatsapp: "",
+    duracao: "",
+    cargaHoraria: "",
+    ritmo: "100% EAD",
+    escolha: "modalidade",
+    turmas: [
+      { id: "COMP", dias: "Por competência", horario: "Em até 15 dias úteis", nota: "Para quem já trabalha na área — sua experiência é reconhecida" },
+      { id: "CONV", dias: "Convencional", horario: "De 6 meses a 1 ano", nota: "Formação completa, do começo ao fim" }
+    ],
+    precos: null,
+    extra: null,
+    ativo: true
+  },
+
+  {
+    id: "mineracao",
+    nome: "Técnico em Mineração",
+    chamada: "Diploma reconhecido em todo o Brasil",
+    descricao: "Curso técnico 100% EAD, para um dos setores que mais crescem no país. Você estuda de onde estiver e recebe diploma de técnico.",
+    paraQuem: "Para trabalhar em mineração e áreas ligadas",
+    ilustra: "generico",
+    whatsapp: "",
+    duracao: "",
+    cargaHoraria: "",
+    ritmo: "100% EAD",
+    escolha: "modalidade",
+    turmas: [
+      { id: "COMP", dias: "Por competência", horario: "Em até 15 dias úteis", nota: "Para quem já trabalha na área — sua experiência é reconhecida" },
+      { id: "CONV", dias: "Convencional", horario: "De 6 meses a 1 ano", nota: "Formação completa, do começo ao fim" }
+    ],
+    precos: null,
+    extra: null,
+    ativo: true
   }
 ];
 
 
-/* Turmas por idade — usado só nos cursos com extra: "faixaEtaria" */
+/* --------------------------------------------------------------------------
+   4) TURMAS POR IDADE — só o Inglês usa
+   -------------------------------------------------------------------------- */
 const FAIXAS_ETARIAS = [
-  { id: "infantil",       rotulo: "Infantil",            detalhe: "6 a 10 anos",  menorDeIdade: true },
-  { id: "preadolescente", rotulo: "Pré-adolescentes",    detalhe: "10 a 14 anos", menorDeIdade: true },
-  { id: "adulto",         rotulo: "Jovens e adultos",    detalhe: "14 a 60 anos", menorDeIdade: false }
+  { valor: "6 a 10 anos",  rotulo: "Criança",          detalhe: "6 a 10 anos",  infantil: true },
+  { valor: "10 a 14 anos", rotulo: "Pré-adolescente",  detalhe: "10 a 14 anos" },
+  { valor: "14 a 60 anos", rotulo: "Jovem ou adulto",  detalhe: "14 a 60 anos" }
 ];
 
 
 /* --------------------------------------------------------------------------
-   4) VENDEDORES / CONSULTORES
+   5) EQUIPE
+   O link de indicação carrega a pessoa: ?v=leticia
 
-   codigo    → o que vai no link: ?v=marcos
-   genero    → "m" ou "f", define a silhueta quando não há foto
-   foto      → deixe "" para usar a silhueta.
-               Quando tiver a foto real: "img/marcos.jpg"
+   codigo → o que vai no link
+   foto   → arquivo dentro de img/equipe/. Deixe "" para usar o monograma.
 
-   O vendedor NÃO tem número aqui de propósito: toda ficha vai para o
-   WhatsApp do CURSO (seção 3), levando o nome de quem indicou na mensagem.
-
-   >>> OS NOMES ABAIXO SÃO FICTÍCIOS (exemplo). Trocar pelos reais. <<<
+   A ficha vai SEMPRE para o WhatsApp do curso, nunca para o número da
+   pessoa. O nome de quem indicou viaja escrito dentro da mensagem.
    -------------------------------------------------------------------------- */
 const VENDEDORES = [
-  { codigo: "marcos",  nome: "Marcos Pereira",  cargo: "Consultor educacional",  genero: "m", foto: "" },
-  { codigo: "juliana", nome: "Juliana Marques", cargo: "Consultora educacional", genero: "f", foto: "" },
-  { codigo: "rafael",  nome: "Rafael Nogueira", cargo: "Consultor educacional",  genero: "m", foto: "" },
-  { codigo: "aline",   nome: "Aline Castro",    cargo: "Consultora educacional", genero: "f", foto: "" }
+  { codigo: "leticia",    nome: "Letícia Silva",  cargo: "Instrutora da Educação",              foto: "img/equipe/leticia.jpg" },
+  { codigo: "vitoria",    nome: "Vitória Silva",  cargo: "Instrutora da Educação",              foto: "img/equipe/vitoria.jpg" },
+  { codigo: "camila",     nome: "Camila da Cruz", cargo: "Instrutora da Educação",              foto: "img/equipe/camila.jpg" },
+  { codigo: "ana-rebeca", nome: "Ana Rebeca",     cargo: "Instrutora da Educação",              foto: "img/equipe/ana-rebeca.jpg" },
+  { codigo: "yasmin",     nome: "Yasmin Pereira", cargo: "Instrutora da Educação",              foto: "img/equipe/yasmin.jpg" },
+  { codigo: "media",      nome: "Mediã Falcão",   cargo: "Supervisora Comercial e de Vendas",   foto: "img/equipe/media.jpg" }
 ];
 
 
 /* --------------------------------------------------------------------------
-   5) ONDE AS FICHAS SÃO GUARDADAS
-
-   Cole aqui o endereço do App da Web do Google (termina em /exec).
-   O passo a passo para gerar está em backend/LEIA-ME-BACKEND.txt
-
-   Enquanto estiver vazio, o site continua funcionando e abrindo o WhatsApp
-   normalmente — só não salva nada na planilha.
-   -------------------------------------------------------------------------- */
-const BACKEND_URL = "";
-
-
-/* --------------------------------------------------------------------------
-   6) DE ONDE A PESSOA CONHECEU O CURSO
+   6) COMO A PESSOA FICOU SABENDO
    -------------------------------------------------------------------------- */
 const ORIGENS = [
-  { id: "instagram", rotulo: "Instagram",       icone: "📷" },
-  { id: "whatsapp",  rotulo: "WhatsApp",        icone: "💬" },
-  { id: "facebook",  rotulo: "Facebook",        icone: "👍" },
-  { id: "indicacao", rotulo: "Indicação",       icone: "🗣️" },
-  { id: "escola",    rotulo: "Escola/Empresa",  icone: "🏢" },
-  { id: "panfleto",  rotulo: "Panfleto",        icone: "📄" },
-  { id: "outro",     rotulo: "Outro",           icone: "✏️" }
+  { valor: "instagram", rotulo: "Instagram" },
+  { valor: "whatsapp",  rotulo: "WhatsApp" },
+  { valor: "facebook",  rotulo: "Facebook" },
+  { valor: "indicacao", rotulo: "Indicação de amigo" },
+  { valor: "panfleto",  rotulo: "Panfleto" },
+  { valor: "passando",  rotulo: "Passei em frente" },
+  { valor: "outro",     rotulo: "Outro" }
 ];
+
+
+/* --------------------------------------------------------------------------
+   7) DOCUMENTOS PARA FECHAR A MATRÍCULA
+   Aparecem na tela final, para a pessoa já ir separando.
+   -------------------------------------------------------------------------- */
+const DOCUMENTOS = [
+  "RG e CPF",
+  "Comprovante de residência",
+  "Comprovante de escolaridade (quando exigido)"
+];
+
+
+/* --------------------------------------------------------------------------
+   8) PLANILHA (opcional)
+   Cole aqui o endereço do Google Apps Script para guardar cada ficha numa
+   planilha. Deixando vazio, o site só abre o WhatsApp.
+   Ver backend/LEIA-ME-BACKEND.txt.
+   -------------------------------------------------------------------------- */
+const BACKEND_URL = "";

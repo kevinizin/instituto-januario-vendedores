@@ -95,7 +95,7 @@ function preencherTextosFixos() {
   document.title = `${INSTITUTO.nome} — Pré-matrícula`;
   $("#topoNome").textContent = INSTITUTO.nome;
   $("#topoSub").textContent = INSTITUTO.subtitulo;
-  $("#topoSelo").textContent = INSTITUTO.sigla.replace(/[^A-Z]/g, "").slice(0, 2) || "IJ";
+  $("#topoSelo").innerHTML = MARCA.selo(38);
   $("#capaTitulo").textContent = INSTITUTO.chamada;
   $("#capaApoio").textContent = INSTITUTO.apoio;
 
@@ -104,30 +104,74 @@ function preencherTextosFixos() {
   $("#rodapeEndereco").textContent =
     `${INSTITUTO.endereco} — ${INSTITUTO.cidade}/${INSTITUTO.estado}` +
     (INSTITUTO.referencia ? ` · ${INSTITUTO.referencia}` : "");
-  $("#rodapeParceria").textContent = `Uma iniciativa ${INSTITUTO.parceira}`;
+  $("#rodapeParceria").innerHTML =
+    `<span class="rodape-kollarez">${MARCA.kollarez(22)}</span>Uma iniciativa ${INSTITUTO.parceira}`;
+
+  // Os documentos que a pessoa vai precisar levar, na tela de sucesso.
+  const docs = $("#sucessoDocumentos");
+  if (docs && typeof DOCUMENTOS !== "undefined" && DOCUMENTOS.length) {
+    docs.innerHTML = `
+      <h3>O que levar no dia</h3>
+      <ul>${DOCUMENTOS.map((d) => `<li>${MARCA.icone("checkRedondo")}<span>${d}</span></li>`).join("")}</ul>`;
+  }
 
   $("#inCidade").value = INSTITUTO.cidade;
   $("#inEstado").value = INSTITUTO.estado;
+}
+
+/** Uma etiqueta pequena com ícone. Usada para duração, carga e ritmo. */
+function etiqueta(icone, texto) {
+  return texto ? `<span class="etiqueta">${MARCA.icone(icone)}${texto}</span>` : "";
+}
+
+/** O quadro de valores do cartão. Curso sem preço definido não mostra nada —
+    é melhor faltar informação do que publicar valor que não foi confirmado. */
+function blocoPrecos(precos) {
+  if (!precos) return "";
+  const linhas = (precos.linhas || [])
+    .map((l) => `<span class="preco-linha"><em>${l.rotulo}</em><b>${l.valor}</b></span>`)
+    .join("");
+  return `
+    <span class="curso-precos">
+      ${precos.matricula ? `<span class="preco-matricula">Matrícula ${precos.matricula}</span>` : ""}
+      ${linhas}
+      ${precos.nota ? `<span class="preco-nota">${precos.nota}</span>` : ""}
+    </span>`;
 }
 
 function montarCursos() {
   const alvo = $("#listaCursos");
   alvo.innerHTML = "";
 
-  CURSOS.filter((c) => c.ativo).forEach((curso) => {
+  CURSOS.filter((c) => c.ativo).forEach((curso, i) => {
     const b = document.createElement("button");
     b.type = "button";
-    b.className = "curso-cartao";
+    b.className = "curso-cartao entra";
+    b.style.setProperty("--ordem", i);      // entrada escalonada
     b.setAttribute("aria-pressed", "false");
     b.dataset.curso = curso.id;
+
     b.innerHTML = `
-      <span class="curso-icone" aria-hidden="true">${curso.icone}</span>
-      <span>
-        <span class="curso-nome">${curso.nome}</span>
-        <span class="curso-chamada">${curso.chamada}</span>
-        ${curso.descricao ? `<span class="curso-descricao">${curso.descricao}</span>` : ""}
+      <span class="curso-topo">
+        ${MARCA.ilustracao(curso.ilustra)}
+        <span class="curso-titulos">
+          <span class="curso-nome">${curso.nome}</span>
+          <span class="curso-chamada">${curso.chamada}</span>
+        </span>
+        <span class="curso-marca" aria-hidden="true">${MARCA.icone("check")}</span>
       </span>
-      <span class="curso-marca" aria-hidden="true">✓</span>`;
+
+      ${curso.paraQuem ? `<span class="curso-paraquem">${curso.paraQuem}</span>` : ""}
+      ${curso.descricao ? `<span class="curso-descricao">${curso.descricao}</span>` : ""}
+
+      <span class="curso-etiquetas">
+        ${etiqueta("calendario", curso.duracao)}
+        ${etiqueta("relogio", curso.cargaHoraria)}
+        ${etiqueta("vagas", curso.ritmo)}
+      </span>
+
+      ${blocoPrecos(curso.precos)}`;
+
     b.addEventListener("click", () => escolherCurso(curso.id));
     alvo.appendChild(b);
   });
@@ -148,27 +192,58 @@ function escolherCurso(id) {
   salvarRascunho();
 }
 
+/** Como a turma aparece escrita na revisão e na mensagem do WhatsApp.
+    Ex.: "Turma 03 · Seg, Qua e Sex · 13:00 às 14:50" */
+function rotuloTurma(turma, curso) {
+  const prefixo = curso && curso.escolha === "modalidade"
+    ? ""
+    : `Turma ${turma.id} · `;
+  return `${prefixo}${turma.dias} · ${turma.horario}`;
+}
+
 function montarTurnos() {
   const curso = cursoAtual();
   const bloco = $("#blocoTurno");
   const lista = $("#listaTurnos");
   lista.innerHTML = "";
 
-  if (!curso || !curso.turnos.length) { bloco.hidden = true; return; }
+  const turmas = (curso && curso.turmas) || [];
+  if (!turmas.length) { bloco.hidden = true; return; }
   bloco.hidden = false;
 
-  curso.turnos.forEach((turno) => {
+  // Curso EAD não tem horário: o que se escolhe ali é o caminho.
+  const porModalidade = curso.escolha === "modalidade";
+  $("#tituloTurno").textContent = porModalidade
+    ? "Como você prefere estudar?"
+    : "Qual horário é melhor para você?";
+  $("#dicaTurno").textContent = porModalidade
+    ? "Escolha o caminho que combina com a sua vida."
+    : "Pode marcar mais de um. Quanto mais horários, mais fácil achar vaga.";
+
+  turmas.forEach((turma, i) => {
+    const rotulo = rotuloTurma(turma, curso);
     const b = document.createElement("button");
     b.type = "button";
-    b.className = "opcao";
-    b.setAttribute("aria-pressed", "false");
-    b.textContent = turno;
+    b.className = "turma entra";
+    b.style.setProperty("--ordem", i);
+    b.setAttribute("aria-pressed", String(estado.turnos.includes(rotulo)));
+    b.innerHTML = `
+      <span class="turma-marca" aria-hidden="true">${MARCA.icone("check")}</span>
+      <span class="turma-corpo">
+        <span class="turma-dias">${turma.dias}</span>
+        <span class="turma-hora">${MARCA.icone("relogio")}${turma.horario}</span>
+        ${turma.nota ? `<span class="turma-nota">${turma.nota}</span>` : ""}
+      </span>
+      ${porModalidade
+        ? ""
+        : `<span class="turma-etiqueta">Turma ${turma.id}${turma.vagas ? ` · ${turma.vagas} vagas` : ""}</span>`}`;
+
     b.addEventListener("click", () => {
       const marcado = b.getAttribute("aria-pressed") === "true";
       b.setAttribute("aria-pressed", String(!marcado));
       estado.turnos = marcado
-        ? estado.turnos.filter((t) => t !== turno)
-        : [...estado.turnos, turno];
+        ? estado.turnos.filter((t) => t !== rotulo)
+        : [...estado.turnos, rotulo];
       esconderErro($("#erroTurno"));
       salvarRascunho();
     });
@@ -185,43 +260,69 @@ function montarFaixas() {
   if (!curso || curso.extra !== "faixaEtaria") { bloco.hidden = true; return; }
   bloco.hidden = false;
 
-  FAIXAS_ETARIAS.forEach((faixa) => {
+  FAIXAS_ETARIAS.forEach((faixa, i) => {
     const b = document.createElement("button");
     b.type = "button";
-    b.className = "opcao";
-    b.setAttribute("aria-pressed", "false");
+    b.className = "opcao entra";
+    b.style.setProperty("--ordem", i);
+    b.dataset.valor = faixa.valor;
+    b.setAttribute("aria-pressed", String(estado.faixaEtaria === faixa.valor));
     b.innerHTML = `<span>${faixa.rotulo}<span class="opcao-detalhe">${faixa.detalhe}</span></span>`;
     b.addEventListener("click", () => {
-      estado.faixaEtaria = faixa.id;
-      $$("#listaFaixas .opcao").forEach((o, i) =>
-        o.setAttribute("aria-pressed", String(FAIXAS_ETARIAS[i].id === faixa.id))
+      estado.faixaEtaria = faixa.valor;
+      $$("#listaFaixas .opcao").forEach((o) =>
+        o.setAttribute("aria-pressed", String(o.dataset.valor === faixa.valor))
       );
       esconderErro($("#erroFaixa"));
       atualizarBlocoResponsavel();
+      atualizarPrecoDoCartao();
       salvarRascunho();
     });
     lista.appendChild(b);
   });
 }
 
+/** A turma infantil do Inglês não paga matrícula e tem mensalidade própria.
+    Quando a pessoa marca "6 a 10 anos", o cartão do curso troca os valores
+    na hora — assim ninguém descobre o preço certo só no atendimento. */
+function atualizarPrecoDoCartao() {
+  const curso = cursoAtual();
+  if (!curso || !curso.precosInfantil) return;
+
+  const faixa = FAIXAS_ETARIAS.find((f) => f.valor === estado.faixaEtaria);
+  const precos = faixa && faixa.infantil ? curso.precosInfantil : curso.precos;
+
+  const cartao = $(`#listaCursos .curso-cartao[data-curso="${curso.id}"]`);
+  const caixa = cartao && $(".curso-precos", cartao);
+  if (!caixa) return;
+
+  const novo = document.createElement("div");
+  novo.innerHTML = blocoPrecos(precos);
+  caixa.replaceWith(novo.firstElementChild);
+}
+
+/** Algumas listas do config chamam a chave de "valor" e outras de "id".
+    Aceitar as duas evita o bug silencioso de gravar undefined no estado. */
+const valorDe = (item) => (item.valor !== undefined ? item.valor : item.id);
+
 function montarEscolhaUnica(seletor, itens, chaveEstado, aoEscolher) {
   const lista = $(seletor);
   lista.innerHTML = "";
-  itens.forEach((item) => {
+  itens.forEach((item, i) => {
+    const valor = valorDe(item);
     const b = document.createElement("button");
     b.type = "button";
-    b.className = "opcao";
-    b.setAttribute("aria-pressed", "false");
-    b.dataset.valor = item.id;
-    b.innerHTML = item.icone
-      ? `<span aria-hidden="true">${item.icone}</span><span>${item.rotulo}</span>`
-      : `<span>${item.rotulo}</span>`;
+    b.className = "opcao entra";
+    b.style.setProperty("--ordem", i);
+    b.setAttribute("aria-pressed", String(estado[chaveEstado] === valor));
+    b.dataset.valor = valor;
+    b.innerHTML = `<span>${item.rotulo}</span>`;
     b.addEventListener("click", () => {
-      estado[chaveEstado] = item.id;
+      estado[chaveEstado] = valor;
       $$(".opcao", lista).forEach((o) =>
-        o.setAttribute("aria-pressed", String(o.dataset.valor === item.id))
+        o.setAttribute("aria-pressed", String(o.dataset.valor === valor))
       );
-      if (aoEscolher) aoEscolher(item);
+      if (aoEscolher) aoEscolher(item, valor);
       salvarRascunho();
     });
     lista.appendChild(b);
@@ -259,8 +360,8 @@ function montarQuemAtendeu() {
   lista.innerHTML = "";
 
   const opcoes = [
-    ...VENDEDORES.map((v) => ({ valor: v.codigo, nome: v.nome, detalhe: v.cargo, foto: avatarDe(v) })),
-    { valor: "", nome: "Ninguém — vim por conta própria", detalhe: "", foto: null }
+    ...VENDEDORES.map((v) => ({ valor: v.codigo, nome: v.nome, detalhe: v.cargo, pessoa: v })),
+    { valor: "", nome: "Ninguém — vim por conta própria", detalhe: "", pessoa: null }
   ];
 
   opcoes.forEach((item) => {
@@ -270,9 +371,9 @@ function montarQuemAtendeu() {
     b.dataset.valor = item.valor;
     b.setAttribute("aria-pressed", String(estado.vendedor === item.valor));
     b.innerHTML =
-      (item.foto
-        ? `<img class="indicacao-foto" style="width:42px;height:42px;border-width:2px" src="${item.foto}" alt="">`
-        : `<span aria-hidden="true">🙋</span>`) +
+      (item.pessoa
+        ? `<span class="indicacao-foto indicacao-foto--pequena">${MARCA.retrato(item.pessoa)}</span>`
+        : `<span class="opcao-icone" aria-hidden="true">${MARCA.icone("pessoa")}</span>`) +
       `<span>${item.nome}${item.detalhe ? `<span class="opcao-detalhe">${item.detalhe}</span>` : ""}</span>`;
 
     b.addEventListener("click", () => {
@@ -295,7 +396,7 @@ function mostrarCartaoVendedor(vendedor) {
   caixa.hidden = false;
   caixa.innerHTML = `
     <div class="indicacao-topo">
-      <img class="indicacao-foto" src="${avatarDe(vendedor)}" alt="Foto de ${vendedor.nome}">
+      <span class="indicacao-foto">${MARCA.retrato(vendedor)}</span>
       <div>
         <p class="indicacao-quem">Você foi indicado por</p>
         <p class="indicacao-nome">${vendedor.nome}</p>
@@ -319,8 +420,7 @@ function mostrarEscolhaVendedor(mensagem) {
   const opcoes = VENDEDORES.map(
     (v) => `
     <button type="button" class="opcao" data-vend="${v.codigo}" aria-pressed="${estado.vendedor === v.codigo}">
-      <img class="indicacao-foto" style="width:44px;height:44px;border-width:2px"
-           src="${avatarDe(v)}" alt="">
+      <span class="indicacao-foto indicacao-foto--pequena">${MARCA.retrato(v)}</span>
       <span>${v.nome}<span class="opcao-detalhe">${v.cargo}</span></span>
     </button>`
   ).join("");
@@ -330,7 +430,7 @@ function mostrarEscolhaVendedor(mensagem) {
     <div class="opcoes">
       ${opcoes}
       <button type="button" class="opcao" data-vend="" aria-pressed="${estado.vendedor === ""}">
-        <span aria-hidden="true">🙋</span>
+        <span class="opcao-icone" aria-hidden="true">${MARCA.icone("pessoa")}</span>
         <span>Ninguém — vim por conta própria</span>
       </button>
     </div>`;
@@ -356,7 +456,7 @@ function mostrarEscolhaVendedor(mensagem) {
 /** Menor de idade se a faixa etária infantil/pré-adolescente foi escolhida
     ou se a data de nascimento indica menos de 18 anos. */
 function ehMenorDeIdade() {
-  const faixa = FAIXAS_ETARIAS.find((f) => f.id === estado.faixaEtaria);
+  const faixa = FAIXAS_ETARIAS.find((f) => valorDe(f) === estado.faixaEtaria);
   if (faixa && faixa.menorDeIdade) return true;
 
   const nasc = dataBR($("#inNascimento").value);
@@ -487,8 +587,11 @@ function validarPasso(passo) {
   if (passo === 1) {
     if (!estado.curso) { exibirErro($("#erroCurso"), "Escolha um curso para continuar."); ok = false; }
     const curso = cursoAtual();
-    if (curso && curso.turnos.length && !estado.turnos.length) {
-      exibirErro($("#erroTurno"), "Escolha pelo menos um horário."); ok = false;
+    const turmas = (curso && curso.turmas) || [];
+    if (turmas.length && !estado.turnos.length) {
+      exibirErro($("#erroTurno"), curso.escolha === "modalidade"
+        ? "Escolha como você prefere estudar."
+        : "Escolha pelo menos um horário."); ok = false;
     }
     if (curso && curso.extra === "faixaEtaria" && !estado.faixaEtaria) {
       exibirErro($("#erroFaixa"), "Escolha a idade do aluno."); ok = false;
@@ -576,8 +679,8 @@ function linhaRevisao(rotulo, valor) {
 
 function montarRevisao() {
   const curso = cursoAtual();
-  const faixa = FAIXAS_ETARIAS.find((f) => f.id === estado.faixaEtaria);
-  const origem = ORIGENS.find((o) => o.id === estado.origem);
+  const faixa = FAIXAS_ETARIAS.find((f) => valorDe(f) === estado.faixaEtaria);
+  const origem = ORIGENS.find((o) => valorDe(o) === estado.origem);
   const menor = !$("#blocoResponsavel").hidden;
 
   const blocos = [
@@ -640,7 +743,7 @@ function montarRevisao() {
 
   const vend = vendedorAtual();
   $("#revisaoVendedor").innerHTML = vend
-    ? `<img src="${avatarDe(vend)}" alt="">
+    ? `<span class="indicacao-foto indicacao-foto--pequena">${MARCA.retrato(vend)}</span>
        <p>Sua inscrição fica registrada com<strong>${vend.nome}</strong></p>`
     : "";
 }
@@ -651,8 +754,8 @@ function montarRevisao() {
 function montarDados() {
   const menor = !$("#blocoResponsavel").hidden;
   const curso = cursoAtual();
-  const faixa = FAIXAS_ETARIAS.find((f) => f.id === estado.faixaEtaria);
-  const origem = ORIGENS.find((o) => o.id === estado.origem);
+  const faixa = FAIXAS_ETARIAS.find((f) => valorDe(f) === estado.faixaEtaria);
+  const origem = ORIGENS.find((o) => valorDe(o) === estado.origem);
   const vend = vendedorAtual();
 
   return {
@@ -933,9 +1036,9 @@ function iniciar() {
     { id: "Outro", rotulo: "Outro" }
   ], "sexo", () => esconderErro($("#erroSexo")));
 
-  montarEscolhaUnica("#listaOrigens", ORIGENS, "origem", (item) => {
+  montarEscolhaUnica("#listaOrigens", ORIGENS, "origem", (item, valor) => {
     esconderErro($("#erroOrigem"));
-    $("#campoOrigemOutro").hidden = item.id !== "outro";
+    $("#campoOrigemOutro").hidden = valor !== "outro";
   });
 
   ligarMascaras();

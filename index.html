@@ -9,7 +9,7 @@
 <!-- Fora do Google de propósito: quem chega aqui vem pelo link do vendedor.
      Quem procura no Google tem que cair no site público do Instituto. -->
 <meta name="robots" content="noindex, nofollow">
-<link rel="stylesheet" href="style.css?v=1">
+<link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 
@@ -18,7 +18,7 @@
 <!-- ================= CABEÇALHO ================= -->
 <header class="topo">
   <div class="topo-marca">
-    <span class="topo-selo" id="topoSelo">IJ</span>
+    <span class="topo-selo" id="topoSelo"></span>
     <span class="topo-nomes">
       <strong id="topoNome">Instituto Januário</strong>
       <small id="topoSub">Centro de Ensino Profissional</small>
@@ -74,9 +74,9 @@
         <p class="erro" id="erroCurso" hidden></p>
 
         <div class="bloco-condicional" id="blocoTurno" hidden>
-          <h3 class="pergunta">Qual o melhor horário para você?</h3>
-          <p class="dica">Pode marcar mais de um.</p>
-          <div class="opcoes" id="listaTurnos"></div>
+          <h3 class="pergunta" id="tituloTurno">Qual horário é melhor para você?</h3>
+          <p class="dica" id="dicaTurno">Pode marcar mais de um.</p>
+          <div class="turmas" id="listaTurnos"></div>
           <p class="erro" id="erroTurno" hidden></p>
         </div>
 
@@ -303,7 +303,13 @@
 
   <!-- ================= TELA DE SUCESSO ================= -->
   <section class="sucesso" id="sucesso" hidden aria-live="polite">
-    <div class="sucesso-marca">✓</div>
+    <!-- O check é desenhado com traço animado, não é uma fonte nem emoji:
+         fica igual em qualquer celular. -->
+    <svg class="sucesso-marca" viewBox="0 0 72 72" aria-hidden="true" focusable="false">
+      <circle class="sucesso-anel" cx="36" cy="36" r="32"/>
+      <path class="sucesso-risco" d="M22 37.5 L32 47 L51 27"/>
+    </svg>
+
     <h2>Pronto! Recebemos sua pré-matrícula.</h2>
     <p class="sucesso-nome" id="sucessoNome"></p>
 
@@ -312,9 +318,11 @@
       <ol>
         <li>O WhatsApp abre com sua mensagem já escrita — é só tocar em enviar.</li>
         <li>A nossa equipe confirma sua vaga e explica valores e horários.</li>
-        <li>Você recebe a lista de documentos para fechar a matrícula.</li>
+        <li>Você vem à escola com os documentos e fecha a matrícula.</li>
       </ol>
     </div>
+
+    <div class="sucesso-documentos" id="sucessoDocumentos"></div>
 
     <a class="botao botao-grande botao-zap" id="linkZapReserva" href="#" target="_blank" rel="noopener">
       O WhatsApp não abriu? Toque aqui
@@ -335,8 +343,8 @@
   <p><a href="privacidade.html">Privacidade e uso dos dados</a></p>
 </footer>
 
-<script src="config.js?v=1"></script>
-<script src="avatars.js?v=1"></script>
-<script src="app.js?v=1"></script>
+<script src="config.js?v=2"></script>
+<script src="marca.js?v=2"></script>
+<script src="app.js?v=2"></script>
 </body>
 </html>
