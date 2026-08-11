@@ -18,12 +18,15 @@ const INSTITUTO = {
 
   // Número usado quando o curso não tiver um número próprio (seção 3).
   // Formato: 55 + DDD + número, só dígitos.
-  whatsappGeral: "5592986139273",
+  whatsappGeral: "5592984456744",
 
   cidade: "Presidente Figueiredo",
   estado: "AM",
-  endereco: "Av. Galo da Serra, nº 80 — Galo da Serra I",
-  referencia: "Rua da Escola Deisy",
+
+  // CONFERIR: os panfletos do Instituto trazem dois números de rua
+  // diferentes — nº 272 (cursos técnicos) e nº 153 (curso de Inglês).
+  endereco: "Rua Gaivota, nº 153 — Bairro Orquídeas",
+  referencia: "",
   instagram: "kollarez.solucoes.ofc",
 
   // Frase grande da abertura do site

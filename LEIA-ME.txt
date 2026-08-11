@@ -34,11 +34,23 @@ Tudo abaixo está com valor de exemplo. Precisa confirmar.
     Informática, Inglês, Administrativo e Monitor Escolar estão
     com Manhã/Tarde/Noite por suposição. Confirmar os verdadeiros.
 
-[ ] WHATSAPP GERAL do Instituto está como 5592986139273.
-    Veio de um post do Instagram. Confirmar se é o número certo.
-    (Achei outros dois em circulação: 92 98555-5626 e um número
-     de Goiás, 62 99434-8653, que aparece no catálogo do WhatsApp.
-     Vale alinhar qual é o oficial.)
+[ ] QUAL É O WHATSAPP OFICIAL?
+    Está como (92) 98445-6744, que é o do panfleto de Inglês.
+    Achei CINCO números em circulação no material do Instituto:
+        (92) 98445-6744   ← o site está usando este
+        (92) 98638-3482
+        (62) 99434-8953   (DDD de Goiás, é o do catálogo do Insta)
+        (92) 98613-9273
+        (92) 98555-5626
+    Alinhar qual é o oficial antes de divulgar o link.
+
+[ ] QUAL É O ENDEREÇO CERTO?
+    Está como "Rua Gaivota, nº 153 — Bairro Orquídeas".
+    Os panfletos trazem dois números de rua diferentes:
+        Rua Gaivota, nº 272   (cursos técnicos)
+        Rua Gaivota, nº 153   (curso de Inglês)
+    Antes eu tinha posto "Av. Galo da Serra, nº 80", que veio de um
+    post mais antigo do Instagram. Confirmar qual vale hoje.
 
 [ ] LOGO do Instituto. Hoje aparecem só as letras "IJ" num quadrado.
     Quando tiver o arquivo, colocar em img/ e ajustar o cabeçalho.
