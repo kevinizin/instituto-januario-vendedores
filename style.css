@@ -161,20 +161,11 @@ a { color: var(--marcaClara); }
 
 
 /* ==========================================================================
-   QUEM INDICOU
+   RETRATO DA EQUIPE
+   Usado na lista "quem falou com você", no passo 4, e no resumo final.
+   Não existe mais cartão no topo da tela: a atribuição é confirmada pela
+   própria pessoa no fim, nunca anunciada antes.
    ========================================================================== */
-
-.indicacao {
-  margin: 16px;
-  padding: 18px;
-  background: var(--caixa);
-  border: 1px solid var(--borda);
-  border-top: 3px solid var(--marca2);
-  border-radius: var(--raio);
-  box-shadow: var(--sombra);
-  animation: surgir .45s var(--curva);
-}
-.indicacao-topo { display: flex; align-items: center; gap: 14px; }
 
 /* O retrato é uma moldura: dentro entra a foto real ou o monograma. */
 .indicacao-foto {
@@ -201,22 +192,6 @@ a { color: var(--marcaClara); }
 }
 .indicacao-foto--pequena .retrato-monograma { font-size: 15px; }
 
-.indicacao-quem { font-size: 15px; color: var(--texto2); margin: 0; }
-.indicacao-nome { font-size: 21px; font-weight: 800; margin: 2px 0 0; line-height: 1.2; }
-.indicacao-cargo { font-size: 14px; color: var(--texto2); margin: 2px 0 0; }
-.indicacao-trocar {
-  margin-top: 14px;
-  width: 100%; min-height: 44px;
-  background: none; border: 1px solid var(--borda);
-  border-radius: 10px;
-  color: var(--marcaClara); font-size: 15px; font-weight: 600;
-  font-family: inherit; cursor: pointer;
-}
-.indicacao-aviso {
-  margin: 12px 0 0; padding: 12px;
-  background: var(--marcaSuave); border-radius: 10px;
-  font-size: 15px;
-}
 
 
 /* ==========================================================================

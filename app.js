@@ -332,30 +332,29 @@ function montarEscolhaUnica(seletor, itens, chaveEstado, aoEscolher) {
 
 /* ================================================= quem indicou ========= */
 
+/** O link pode trazer quem indicou (?v=leticia), mas isso não decide nada
+    sozinho: a escolha é sempre confirmada pela própria pessoa, no fim do
+    preenchimento. O link só deixa a opção já marcada.
+
+    O cartão no topo da tela saiu de propósito — anunciar o nome antes de
+    a pessoa dizer qualquer coisa é dar a atribuição por certa cedo demais,
+    e quem foi atendido por outra pessoa acabava passando batido. */
 function montarIndicacao() {
   const codigo = new URLSearchParams(location.search).get("v") || "";
   estado.vendedorDoLink = codigo;
 
   const encontrado = VENDEDORES.find((v) => v.codigo === codigo);
-  if (encontrado) {
-    estado.vendedor = encontrado.codigo;
-    mostrarCartaoVendedor(encontrado);
-  } else if (codigo) {
-    mostrarEscolhaVendedor(
-      "Recebemos um link de indicação, mas não reconhecemos quem enviou. Quem falou com você?"
-    );
-  }
+  if (encontrado) estado.vendedor = encontrado.codigo;
 
   montarQuemAtendeu();
 }
 
-/** Quando o link não traz vendedor, perguntamos no passo 4.
-    Sem isso, quem foi atendido pessoalmente não conta para a cota de ninguém. */
+/** A pergunta do passo 4. Aparece sempre, e é obrigatória: sem ela, quem
+    atendeu não conta para a cota de ninguém. */
 function montarQuemAtendeu() {
   const campo = $("#campoQuemAtendeu");
   const lista = $("#listaQuemAtendeu");
 
-  if (vendedorAtual()) { campo.hidden = true; return; }
   campo.hidden = false;
   lista.innerHTML = "";
 
@@ -364,10 +363,11 @@ function montarQuemAtendeu() {
     { valor: "", nome: "Ninguém — vim por conta própria", detalhe: "", pessoa: null }
   ];
 
-  opcoes.forEach((item) => {
+  opcoes.forEach((item, i) => {
     const b = document.createElement("button");
     b.type = "button";
-    b.className = "opcao";
+    b.className = "opcao entra";
+    b.style.setProperty("--ordem", i);
     b.dataset.valor = item.valor;
     b.setAttribute("aria-pressed", String(estado.vendedor === item.valor));
     b.innerHTML =
@@ -382,72 +382,11 @@ function montarQuemAtendeu() {
         o.setAttribute("aria-pressed", String(o.dataset.valor === item.valor))
       );
       esconderErro($("#erroQuemAtendeu"));
-      const escolhido = vendedorAtual();
-      if (escolhido) mostrarCartaoVendedor(escolhido);
       salvarRascunho();
     });
 
     lista.appendChild(b);
   });
-}
-
-function mostrarCartaoVendedor(vendedor) {
-  const caixa = $("#cartaoIndicacao");
-  caixa.hidden = false;
-  caixa.innerHTML = `
-    <div class="indicacao-topo">
-      <span class="indicacao-foto">${MARCA.retrato(vendedor)}</span>
-      <div>
-        <p class="indicacao-quem">Você foi indicado por</p>
-        <p class="indicacao-nome">${vendedor.nome}</p>
-        <p class="indicacao-cargo">${vendedor.cargo}</p>
-      </div>
-    </div>
-    <button type="button" class="indicacao-trocar" id="btnTrocarVendedor">
-      Não foi essa pessoa? Trocar
-    </button>`;
-
-  $("#btnTrocarVendedor").addEventListener("click", () =>
-    mostrarEscolhaVendedor("Quem falou com você sobre o curso?")
-  );
-  salvarRascunho();
-}
-
-function mostrarEscolhaVendedor(mensagem) {
-  const caixa = $("#cartaoIndicacao");
-  caixa.hidden = false;
-
-  const opcoes = VENDEDORES.map(
-    (v) => `
-    <button type="button" class="opcao" data-vend="${v.codigo}" aria-pressed="${estado.vendedor === v.codigo}">
-      <span class="indicacao-foto indicacao-foto--pequena">${MARCA.retrato(v)}</span>
-      <span>${v.nome}<span class="opcao-detalhe">${v.cargo}</span></span>
-    </button>`
-  ).join("");
-
-  caixa.innerHTML = `
-    <p class="indicacao-quem" style="margin-bottom:12px">${mensagem}</p>
-    <div class="opcoes">
-      ${opcoes}
-      <button type="button" class="opcao" data-vend="" aria-pressed="${estado.vendedor === ""}">
-        <span class="opcao-icone" aria-hidden="true">${MARCA.icone("pessoa")}</span>
-        <span>Ninguém — vim por conta própria</span>
-      </button>
-    </div>`;
-
-  $$("#cartaoIndicacao .opcao").forEach((b) =>
-    b.addEventListener("click", () => {
-      estado.vendedor = b.dataset.vend;
-      const escolhido = vendedorAtual();
-      if (escolhido) mostrarCartaoVendedor(escolhido);
-      else {
-        $$("#cartaoIndicacao .opcao").forEach((o) =>
-          o.setAttribute("aria-pressed", String(o.dataset.vend === ""))
-        );
-        salvarRascunho();
-      }
-    })
-  );
 }
 
 
@@ -899,7 +838,6 @@ function aoEnviar(evento) {
 
 function mostrarSucesso(dados, link) {
   $("#ficha").hidden = true;
-  $("#cartaoIndicacao").hidden = true;
   $("#sucesso").hidden = false;
   $("#sucessoNome").textContent = `${dados.nome} — ${dados.curso}`;
   $("#linkZapReserva").href = link;
@@ -969,8 +907,6 @@ function carregarRascunho() {
   // O link atual manda em quem indicou; o rascunho só vale se não veio ?v=
   if (!estado.vendedorDoLink && salvo.vendedor !== undefined && salvo.vendedor !== null) {
     estado.vendedor = salvo.vendedor;
-    const vend = vendedorAtual();
-    if (vend) mostrarCartaoVendedor(vend);
     $$("#listaQuemAtendeu .opcao").forEach((o) =>
       o.setAttribute("aria-pressed", String(o.dataset.valor === estado.vendedor))
     );
