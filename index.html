@@ -9,7 +9,7 @@
 <!-- Fora do Google de propósito: quem chega aqui vem pelo link do vendedor.
      Quem procura no Google tem que cair no site público do Instituto. -->
 <meta name="robots" content="noindex, nofollow">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 
@@ -232,6 +232,15 @@
           <p class="erro" hidden></p>
         </div>
 
+        <!-- Quem atendeu vem antes de "como ficou sabendo": é a pergunta
+             que decide a comissão, então merece o lugar de cima. -->
+        <div class="campo" id="campoQuemAtendeu" hidden>
+          <span class="rotulo">Alguém do Instituto falou com você sobre o curso?</span>
+          <p class="dica">Assim a gente sabe quem te atendeu.</p>
+          <div class="opcoes" id="listaQuemAtendeu"></div>
+          <p class="erro" id="erroQuemAtendeu" hidden></p>
+        </div>
+
         <div class="campo">
           <span class="rotulo">Como você ficou sabendo do curso?</span>
           <div class="opcoes" id="listaOrigens"></div>
@@ -242,14 +251,6 @@
           <label for="inOrigemOutro">Conta pra gente como foi</label>
           <input type="text" id="inOrigemOutro" name="comoSoubeOutro" enterkeyhint="next">
           <p class="erro" hidden></p>
-        </div>
-
-        <!-- Só aparece quando o link não trouxe o vendedor -->
-        <div class="campo" id="campoQuemAtendeu" hidden>
-          <span class="rotulo">Alguém do Instituto falou com você sobre o curso?</span>
-          <p class="dica">Assim a gente sabe quem te atendeu.</p>
-          <div class="opcoes" id="listaQuemAtendeu"></div>
-          <p class="erro" id="erroQuemAtendeu" hidden></p>
         </div>
       </fieldset>
 
@@ -339,8 +340,8 @@
   <p><a href="privacidade.html">Privacidade e uso dos dados</a></p>
 </footer>
 
-<script src="config.js?v=5"></script>
-<script src="marca.js?v=5"></script>
-<script src="app.js?v=5"></script>
+<script src="config.js?v=6"></script>
+<script src="marca.js?v=6"></script>
+<script src="app.js?v=6"></script>
 </body>
 </html>
