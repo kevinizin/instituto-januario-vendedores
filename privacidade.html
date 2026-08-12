@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacidade e uso dos dados — Instituto Januário</title>
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
 <style>
   .texto { max-width: 640px; margin: 0 auto; padding: 24px 18px 60px; }
   .texto h1 { font-size: 28px; line-height: 1.25; margin: 0 0 8px; }
@@ -27,6 +27,16 @@
       <strong id="hNome">Instituto Januário</strong>
       <small>Privacidade e uso dos dados</small>
     </span>
+
+    <!-- Voltar também aqui em cima: quem abre esta página no meio do
+         formulário não deveria precisar rolar até o fim para sair. -->
+    <a class="topo-voltar" href="index.html" aria-label="Voltar para a pré-matrícula">
+      <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" fill="none"
+           stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H6M11.5 6l-6 6 6 6"/>
+      </svg>
+      Voltar
+    </a>
   </div>
 </header>
 
@@ -40,7 +50,7 @@
 
   <h2>O que a gente pede</h2>
   <ul>
-    <li><strong>Do aluno:</strong> nome completo, data de nascimento, sexo, CPF e RG.</li>
+    <li><strong>Do aluno:</strong> nome completo, data de nascimento, sexo e CPF. O RG é opcional.</li>
     <li><strong>Para contato:</strong> WhatsApp, e-mail e Instagram (estes dois só se você quiser).</li>
     <li><strong>Onde mora:</strong> rua, bairro, cidade e estado.</li>
     <li><strong>Sobre o curso:</strong> qual curso, qual horário e como você ficou sabendo da gente.</li>
@@ -62,9 +72,10 @@
      atendeu você. Os dados ficam numa planilha com acesso controlado.</p>
   <div class="destaque">
     <strong>Sobre o WhatsApp:</strong> quando você envia a ficha, abrimos uma
-    conversa no WhatsApp com um resumo. Nessa mensagem <strong>não vai o seu CPF
-    nem o seu RG</strong> — esses dois ficam guardados só na planilha, justamente
-    para não ficarem circulando em celular.
+    conversa no WhatsApp com um resumo dela. Nesse resumo vai o
+    <strong>CPF</strong> — o seu e, se você for menor de idade, também o do seu
+    responsável —, porque a secretaria precisa dele para fechar a matrícula e
+    emitir o certificado. O seu <strong>RG não vai</strong> nessa mensagem.
   </div>
 
   <h2>Se o aluno for menor de idade</h2>
@@ -91,11 +102,17 @@
   <h2>Como falar com a gente</h2>
   <p id="pContato"></p>
 
-  <p style="margin-top:34px"><a href="index.html">← Voltar para a pré-matrícula</a></p>
+  <a class="botao botao-secundario voltar-rodape" href="index.html">
+    <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" fill="none"
+         stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H6M11.5 6l-6 6 6 6"/>
+    </svg>
+    Voltar para a pré-matrícula
+  </a>
 </main>
 
-<script src="config.js?v=3"></script>
-<script src="marca.js?v=3"></script>
+<script src="config.js?v=4"></script>
+<script src="marca.js?v=4"></script>
 <script>
   document.getElementById("topoSelo").innerHTML = MARCA.selo(38);
   document.title = 'Privacidade — ' + INSTITUTO.nome;

@@ -135,6 +135,30 @@ a { color: var(--marcaClara); }
 .topo-nomes strong { font-size: 18px; letter-spacing: -.2px; }
 .topo-nomes small { font-size: 12px; opacity: .82; letter-spacing: .04em; text-transform: uppercase; }
 
+/* Voltar no canto do cabeçalho. Existe nas páginas de apoio para quem
+   abriu no meio do formulário não ter que rolar até o fim para sair. */
+.topo-voltar {
+  margin-left: auto;
+  display: inline-flex; align-items: center; gap: 7px;
+  flex: none;
+  min-height: 44px; padding: 8px 15px;
+  border: 1px solid rgba(255, 255, 255, .3);
+  border-radius: 11px;
+  color: #fff; text-decoration: none;
+  font-size: 15px; font-weight: 600;
+  transition: background-color .16s var(--curva), border-color .16s var(--curva);
+}
+.topo-voltar:hover { background: rgba(255, 255, 255, .12); border-color: var(--marca2); }
+.topo-voltar .icone { width: 16px; height: 16px; }
+
+/* Em tela estreita o texto sai e sobra só a seta, para não espremer o nome. */
+@media (max-width: 400px) {
+  .topo-voltar { font-size: 0; gap: 0; padding: 8px 12px; }
+  .topo-voltar .icone { width: 20px; height: 20px; }
+}
+
+.voltar-rodape { margin-top: 34px; }
+
 
 /* ==========================================================================
    QUEM INDICOU
