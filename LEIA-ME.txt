@@ -49,7 +49,7 @@ do Instituto:
         camila.jpg      Camila da Cruz
         ana-rebeca.jpg  Ana Rebeca
         yasmin.jpg      Yasmin Pereira
-        media.jpg       Mediã Falcão
+        midia.jpg       Midiã Falcão
 
     Enquanto a foto não estiver lá, aparece um monograma dourado
     com as iniciais da pessoa. Não quebra nada.
@@ -101,15 +101,21 @@ pessoa que indicou. O crédito viaja escrito dentro da mensagem:
     *Horário:* Turma 09 · Ter, Qui e Sáb · 13:00 às 15:00
     *Turma:* Jovem ou adulto (14 a 60 anos)
 
-    *INDICADO POR:* Mediã Falcão
+    *INDICADO POR:* Midiã Falcão
 
     *Aluno:* ...
 
 Assim a secretaria recebe tudo num lugar só e já sabe de quem
 creditar a venda.
 
-CPF e RG NÃO vão na mensagem, de propósito. Documento de aluno
-espalhado em celular de vendedor é risco que não precisa existir.
+O CPF VAI na mensagem — do aluno e, quando ele é menor, também do
+responsável. É obrigatório: sem CPF a secretaria não fecha matrícula
+nem emite certificado, então não faz sentido deixar a ficha passar
+sem ele.
+
+O RG continua FORA da mensagem e continua opcional. Ele não é
+necessário para abrir o cadastro, e é um documento a menos
+circulando em celular de vendedor.
 
 
 ================================================================
@@ -229,5 +235,7 @@ que não podem ser ignoradas:
    responsável e exige a autorização dele. Isso não é firula:
    é o artigo 14 da LGPD.
 
-3. CPF e RG não vão na mensagem de WhatsApp de propósito. Ficam
-   só na planilha, com acesso controlado.
+3. O CPF vai na mensagem de WhatsApp porque a secretaria precisa
+   dele para fechar a matrícula. Isso significa que o número fica
+   no celular de quem recebe: oriente a equipe a não repassar e a
+   apagar conversa antiga. O RG fica fora.

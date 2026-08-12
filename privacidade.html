@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacidade e uso dos dados — Instituto Januário</title>
-<link rel="stylesheet" href="style.css?v=1">
+<link rel="stylesheet" href="style.css?v=3">
 <style>
   .texto { max-width: 640px; margin: 0 auto; padding: 24px 18px 60px; }
   .texto h1 { font-size: 28px; line-height: 1.25; margin: 0 0 8px; }
@@ -22,7 +22,7 @@
 
 <header class="topo">
   <div class="topo-marca">
-    <span class="topo-selo">IJ</span>
+    <span class="topo-selo" id="topoSelo"></span>
     <span class="topo-nomes">
       <strong id="hNome">Instituto Januário</strong>
       <small>Privacidade e uso dos dados</small>
@@ -94,8 +94,10 @@
   <p style="margin-top:34px"><a href="index.html">← Voltar para a pré-matrícula</a></p>
 </main>
 
-<script src="config.js?v=1"></script>
+<script src="config.js?v=3"></script>
+<script src="marca.js?v=3"></script>
 <script>
+  document.getElementById("topoSelo").innerHTML = MARCA.selo(38);
   document.title = 'Privacidade — ' + INSTITUTO.nome;
   document.getElementById('hNome').textContent = INSTITUTO.nome;
 

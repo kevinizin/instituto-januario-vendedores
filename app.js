@@ -529,10 +529,14 @@ function checarCampo(campo) {
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(v)) return "Confira o e-mail. Exemplo: nome@gmail.com";
       return "";
 
+    // O CPF é obrigatório dos dois lados: do aluno e, quando o aluno é
+    // menor, também do responsável. Sem ele a secretaria não consegue
+    // fechar a matrícula nem emitir o certificado.
     case "inCPF":
     case "inRespCPF":
-      if (dispensado) return "";
-      if (!v) return campo.id === "inRespCPF" ? "Faltou o CPF do responsável." : "Faltou o CPF. Se não tiver, toque no botão abaixo.";
+      if (!v) return campo.id === "inRespCPF"
+        ? "Faltou o CPF do responsável."
+        : "Faltou o CPF do aluno.";
       if (!cpfValido(v)) return "Esse CPF não confere. Confira os números.";
       return "";
 
@@ -716,7 +720,7 @@ function montarRevisao() {
     {
       passo: 4, titulo: "Documentos",
       linhas:
-        linhaRevisao("CPF", $("#inCPF").dataset.naotenho === "1" ? "Vou levar depois" : $("#inCPF").value.trim()) +
+        linhaRevisao("CPF", $("#inCPF").value.trim()) +
         linhaRevisao("RG", $("#inRG").dataset.naotenho === "1" ? "Vou levar depois" : $("#inRG").value.trim()) +
         linhaRevisao("Soube por", origem ? origem.rotulo : "") +
         linhaRevisao("Detalhe", $("#inOrigemOutro").value.trim())
@@ -767,7 +771,7 @@ function montarDados() {
     nome: $("#inNome").value.trim(),
     nascimento: $("#inNascimento").value.trim(),
     sexo: estado.sexo || "",
-    cpf: $("#inCPF").dataset.naotenho === "1" ? "Não informado" : $("#inCPF").value.trim(),
+    cpf: $("#inCPF").value.trim(),
     rg: $("#inRG").dataset.naotenho === "1" ? "Não informado" : $("#inRG").value.trim(),
 
     telefone: $("#inTelefone").value.trim(),
@@ -799,8 +803,12 @@ function montarDados() {
   };
 }
 
-/** Mensagem do WhatsApp. Sem CPF e sem RG de propósito:
-    documento fica só na planilha, não espalhado em celular de vendedor. */
+/** Mensagem do WhatsApp — é o relatório que a secretaria recebe.
+
+    O CPF vai junto, do aluno e do responsável, porque sem ele não dá
+    para fechar matrícula nem emitir certificado. O RG continua fora:
+    não é exigido para abrir o cadastro e é um documento a menos
+    circulando em celular. */
 function textoWhatsApp(d) {
   const linhas = [
     `*PRÉ-MATRÍCULA — ${INSTITUTO.nome.toUpperCase()}*`,
@@ -817,8 +825,10 @@ function textoWhatsApp(d) {
     : "*INDICADO POR:* ninguém — chegou direto pelo site");
 
   linhas.push("", `*Aluno:* ${d.nome}`, `*Nascimento:* ${d.nascimento}`);
+  if (d.cpf) linhas.push(`*CPF do aluno:* ${d.cpf}`);
   if (d.responsavelNome) {
     linhas.push(`*Responsável:* ${d.responsavelNome} (${d.responsavelParentesco})`);
+    if (d.responsavelCPF) linhas.push(`*CPF do responsável:* ${d.responsavelCPF}`);
     linhas.push(`*WhatsApp do responsável:* ${d.responsavelTelefone}`);
   }
   linhas.push(`*WhatsApp:* ${d.telefone}`);

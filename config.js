@@ -303,7 +303,7 @@ const VENDEDORES = [
   { codigo: "camila",     nome: "Camila da Cruz", cargo: "Instrutora da Educação",              foto: "img/equipe/camila.jpg" },
   { codigo: "ana-rebeca", nome: "Ana Rebeca",     cargo: "Instrutora da Educação",              foto: "img/equipe/ana-rebeca.jpg" },
   { codigo: "yasmin",     nome: "Yasmin Pereira", cargo: "Instrutora da Educação",              foto: "img/equipe/yasmin.jpg" },
-  { codigo: "media",      nome: "Mediã Falcão",   cargo: "Supervisora Comercial e de Vendas",   foto: "img/equipe/media.jpg" }
+  { codigo: "midia",      nome: "Midiã Falcão",   cargo: "Supervisora Comercial e de Vendas",   foto: "img/equipe/midia.jpg" }
 ];
 
 

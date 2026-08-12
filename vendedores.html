@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Links dos consultores — Instituto Januário</title>
-<link rel="stylesheet" href="style.css?v=1">
+<link rel="stylesheet" href="style.css?v=3">
 <style>
   .painel { max-width: 760px; margin: 0 auto; padding: 22px 18px 60px; }
   .painel h1 { font-size: 28px; margin: 0 0 6px; }
@@ -57,7 +57,7 @@
 
 <header class="topo">
   <div class="topo-marca">
-    <span class="topo-selo">IJ</span>
+    <span class="topo-selo" id="topoSelo"></span>
     <span class="topo-nomes">
       <strong>Links dos consultores</strong>
       <small>Uso interno — não divulgar esta página</small>
@@ -82,12 +82,14 @@
   <div id="lista"></div>
 </main>
 
-<script src="config.js?v=2"></script>
-<script src="marca.js?v=2"></script>
+<script src="config.js?v=3"></script>
+<script src="marca.js?v=3"></script>
 <script>
 (function () {
   const campoBase = document.getElementById('base');
   const lista = document.getElementById('lista');
+
+  document.getElementById("topoSelo").innerHTML = MARCA.selo(38);
 
   campoBase.value = location.href.replace(/vendedores\.html.*$/, '');
 
@@ -113,7 +115,7 @@
                   </div>`;
         }).join('')}
         <div class="link-linha">
-          <span class="link-curso">🔗 Link geral (todos os cursos)</span>
+          <span class="link-curso">Link geral (todos os cursos)</span>
           <button class="btn-copiar" type="button" data-url="${base}?v=${v.codigo}">Copiar</button>
           <span class="link-url">${base}?v=${v.codigo}</span>
         </div>

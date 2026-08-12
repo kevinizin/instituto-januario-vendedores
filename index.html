@@ -9,7 +9,7 @@
 <!-- Fora do Google de propósito: quem chega aqui vem pelo link do vendedor.
      Quem procura no Google tem que cair no site público do Instituto. -->
 <meta name="robots" content="noindex, nofollow">
-<link rel="stylesheet" href="style.css?v=2">
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 
@@ -146,9 +146,10 @@
 
           <div class="campo">
             <label for="inRespCPF">CPF do responsável</label>
+            <p class="dica">Obrigatório. O aluno menor precisa dos dois CPFs.</p>
             <input type="text" id="inRespCPF" name="responsavelCPF"
                    inputmode="numeric" placeholder="000.000.000-00" maxlength="14"
-                   enterkeyhint="next">
+                   enterkeyhint="next" required>
             <p class="erro" hidden></p>
           </div>
         </div>
@@ -221,11 +222,10 @@
 
         <div class="campo">
           <label for="inCPF">CPF do aluno</label>
-          <p class="dica">Só os números, a gente coloca os pontos.</p>
+          <p class="dica">Só os números, a gente coloca os pontos. É obrigatório para fechar a matrícula.</p>
           <input type="text" id="inCPF" name="cpf"
                  inputmode="numeric" placeholder="000.000.000-00" maxlength="14"
-                 enterkeyhint="next">
-          <button type="button" class="botao-vazio" data-naotenho="inCPF">Não tenho CPF agora</button>
+                 enterkeyhint="next" required>
           <p class="erro" hidden></p>
         </div>
 
@@ -343,8 +343,8 @@
   <p><a href="privacidade.html">Privacidade e uso dos dados</a></p>
 </footer>
 
-<script src="config.js?v=2"></script>
-<script src="marca.js?v=2"></script>
-<script src="app.js?v=2"></script>
+<script src="config.js?v=3"></script>
+<script src="marca.js?v=3"></script>
+<script src="app.js?v=3"></script>
 </body>
 </html>
