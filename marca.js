@@ -271,8 +271,21 @@ const MARCA = (() => {
     // O monograma fica embaixo e a foto por cima. Se o arquivo não existir
     // ainda, a foto se apaga sozinha e sobra o monograma — nunca um
     // quadrado quebrado na frente do cliente.
+    // foco  → move o recorte, e só funciona quando a foto é mais alta ou
+    //         mais larga que o círculo.
+    // zoom  → aproxima. É o único jeito de destacar o rosto numa foto
+    //         quadrada, onde a imagem inteira já cabe no círculo e mover
+    //         o recorte não muda nada.
+    const regras = [];
+    if (pessoa.foco) regras.push(`object-position:${pessoa.foco}`);
+    if (pessoa.zoom) {
+      regras.push(`transform:scale(${pessoa.zoom})`);
+      regras.push(`transform-origin:${pessoa.foco || "50% 50%"}`);
+    }
+    const estilo = regras.length ? ` style="${regras.join(";")}"` : "";
+
     return mono +
-      `<img class="retrato-img" src="${pessoa.foto}" alt="" loading="lazy"
+      `<img class="retrato-img"${estilo} src="${pessoa.foto}" alt="" loading="lazy"
             decoding="async" onerror="this.remove()">`;
   }
 

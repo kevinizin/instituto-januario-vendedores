@@ -293,17 +293,24 @@ const FAIXAS_ETARIAS = [
 
    codigo → o que vai no link
    foto   → arquivo dentro de img/equipe/. Deixe "" para usar o monograma.
+   foco   → onde está o rosto na foto, para o recorte redondo não cortar
+            errado. Primeiro número é esquerda→direita, segundo é
+            cima→baixo. "50% 50%" é o meio. Se a pessoa aparece mais em
+            cima, use um número menor no segundo, tipo "50% 25%".
 
    A ficha vai SEMPRE para o WhatsApp do curso, nunca para o número da
    pessoa. O nome de quem indicou viaja escrito dentro da mensagem.
    -------------------------------------------------------------------------- */
 const VENDEDORES = [
-  { codigo: "leticia",    nome: "Letícia Silva",  cargo: "Instrutora da Educação",              foto: "img/equipe/leticia.jpg" },
-  { codigo: "vitoria",    nome: "Vitória Silva",  cargo: "Instrutora da Educação",              foto: "img/equipe/vitoria.jpg" },
-  { codigo: "camila",     nome: "Camila da Cruz", cargo: "Instrutora da Educação",              foto: "img/equipe/camila.jpg" },
-  { codigo: "ana-rebeca", nome: "Ana Rebeca",     cargo: "Instrutora da Educação",              foto: "img/equipe/ana-rebeca.jpg" },
-  { codigo: "yasmin",     nome: "Yasmin Pereira", cargo: "Instrutora da Educação",              foto: "img/equipe/yasmin.jpg" },
-  { codigo: "midia",      nome: "Midiã Falcão",   cargo: "Supervisora Comercial e de Vendas",   foto: "img/equipe/midia.jpg" }
+  { codigo: "leticia",    nome: "Letícia Silva",  cargo: "Instrutora da Educação",            foto: "img/equipe/leticia.jpg",    foco: "50% 28%" },
+  { codigo: "vitoria",    nome: "Vitória Silva",  cargo: "Instrutora da Educação",            foto: "img/equipe/vitoria.jpg",    foco: "50% 26%" },
+  // O brasão pintado na parede ocupa a metade de cima da foto da Camila,
+  // então o recorte precisa descer para pegar o rosto dela.
+  { codigo: "camila",     nome: "Camila da Cruz", cargo: "Instrutora da Educação",            foto: "img/equipe/camila.jpg",     foco: "50% 66%", zoom: 1.75 },
+  { codigo: "ana-rebeca", nome: "Ana Rebeca",     cargo: "Instrutora da Educação",            foto: "img/equipe/ana-rebeca.jpg", foco: "50% 30%" },
+  // A da Yasmin é uma arte com os dois logos; ela fica um pouco à direita.
+  { codigo: "yasmin",     nome: "Yasmin Pereira", cargo: "Instrutora da Educação",            foto: "img/equipe/yasmin.jpg",     foco: "43% 43%", zoom: 2.05 },
+  { codigo: "midia",      nome: "Midiã Falcão",   cargo: "Supervisora Comercial e de Vendas", foto: "img/equipe/midia.jpg",      foco: "50% 26%" }
 ];
 
 
